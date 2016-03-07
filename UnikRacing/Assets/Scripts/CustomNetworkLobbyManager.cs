@@ -7,10 +7,12 @@ namespace Rafiwui.Networking
 {
     public class CustomNetworkLobbyManager : NetworkLobbyManager
     {
+        #region Public Inspector Variables
+
         [Space]
         [Space]
         [Header("Custom Elements")]
-        public string gameTitle;
+        public string title;
 
         [Space]
         [Tooltip("Time in seconds until the game starts after every player is ready")]
@@ -18,10 +20,17 @@ namespace Rafiwui.Networking
 
         [Space]
         [Header("UI Elements")]
-        public Text title;
+        public Text gameTitle;
+        public RectTransform mainPanel;
+        public RectTransform searchServerPanel;
+        public RectTransform serverLobbyPanel;
         public Text countdown;
-        public InputField lANGameName;
-        public InputField lANGamePassword;
+
+        #endregion
+
+        #region Privat Variables
+        private RectTransform activePanel;
+        #endregion
 
         #region Coroutines
         IEnumerator CountdownToStart()
@@ -32,7 +41,15 @@ namespace Rafiwui.Networking
 
         void Start()
         {
-            title.text = gameTitle;
+            gameTitle.text = title;
+            activePanel = mainPanel;
+
+            mainPanel.anchorMin = Vector2.zero;
+            mainPanel.anchorMax = Vector2.one;
+            searchServerPanel.anchorMin = Vector2.one;
+            searchServerPanel.anchorMax = Vector2.one * 2;
+            serverLobbyPanel.anchorMin = Vector2.one;
+            serverLobbyPanel.anchorMax = Vector2.one * 2;
         }
 
         #region OverrideFunctions
@@ -46,32 +63,23 @@ namespace Rafiwui.Networking
         #endregion
 
         #region OnClickButtonEvents
-        public void OnClickHostButton()
-        {
-            StartMatchMaker();
-            matchMaker.CreateMatch(lANGameName.text, (uint)maxPlayers, true, lANGamePassword.text, OnMatchCreate);
-        }
-
-        public void OnClickSearchButton()
-        {
-
-        }
-
-        public void OnClickLocalServerButton()
-        {
-
-        }
         #endregion
 
         #region OnEndEditEvents
-        public void OnEndEditLANHostName(string name)
-        {
-            if (Input.GetKeyDown(KeyCode.Return))
-            {
-                OnClickHostButton();
-            }
-        }
         #endregion
+
+        private void ChangePanelTo(RectTransform panel)
+        {
+            if(activePanel.gameObject.tag != TagManager.MainPanel)
+            {
+                activePanel.anchorMin = Vector2.one;
+                activePanel.anchorMax = Vector2.one * 2;
+            }
+
+            activePanel = panel;
+            panel.anchorMin = Vector2.zero;
+            panel.anchorMax = Vector2.one;
+        }
 
     }
 }
