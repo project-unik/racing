@@ -32,6 +32,31 @@ public class RacerBehaviour : MonoBehaviour
         rb = this.GetComponent<Rigidbody>();
     }
 
+    void Update()
+    {
+        // Handle player input for acceleration.
+        float vertical = Input.GetAxis("Vertical");
+        if (vertical != 0)
+        {
+            //accelerate forward
+            if (vertical > 0)
+            {
+                rb.velocity += this.transform.forward * vertical * accForward * Time.deltaTime;
+            }
+            //accelerate backward
+            else
+            {
+                rb.velocity += this.transform.forward * vertical * accBackward * Time.deltaTime;
+            }
+        }
+        float horizontal = Input.GetAxis("Horizontal");
+        if (horizontal != 0)
+        {
+            //accelerate sideward
+            rb.velocity += this.transform.right * horizontal * accSide * Time.deltaTime;
+        }
+    }
+
     void FixedUpdate()
     {
         RaycastHit hit;
@@ -54,29 +79,7 @@ public class RacerBehaviour : MonoBehaviour
         rb.AddTorque(torque * hoverSpeed * hoverSpeed);
 
         // Add air friction to slow down the vehicle over time.
-        float f = airFriction * Time.deltaTime;
-        rb.AddForce(Vector3.Scale(-rb.velocity.normalized, new Vector3(f, f, f)), ForceMode.VelocityChange);
-
-        // Handle player input for acceleration.
-        float vertical = Input.GetAxis("Vertical");
-        if (vertical != 0)
-        {
-            //accelerate forward
-            if (vertical > 0)
-            {
-                rb.velocity += new Vector3(0, 0, vertical * accForward * Time.deltaTime);
-            }
-            //accelerate backward
-            else
-            {
-                rb.velocity += new Vector3(0, 0, vertical * accBackward * Time.deltaTime);
-            }
-        }
-        float horizontal = Input.GetAxis("Horizontal");
-        if (horizontal != 0)
-        {
-            //accelerate sideward
-            rb.velocity += new Vector3(horizontal * accSide * Time.deltaTime, 0, 0);
-        }
+        float airForce = airFriction * Time.deltaTime;
+        rb.AddForce(Vector3.Scale(-rb.velocity.normalized, new Vector3(airForce, airForce, airForce)), ForceMode.VelocityChange);
     }
 }
