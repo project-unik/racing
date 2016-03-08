@@ -18,7 +18,6 @@ using System.Collections;
 public class CameraBehaviour : MonoBehaviour
 {
     private Rigidbody rb;
-    private Camera cam;
 
     /*!
      * The target #GameObject that the camera will follow. Must
@@ -38,7 +37,6 @@ public class CameraBehaviour : MonoBehaviour
         Assert.IsNotNull(this.GetComponent<Camera>());
         cameraOffset = this.transform.position - targetObject.transform.position;
         rb = targetObject.GetComponent<Rigidbody>();
-        cam = this.GetComponent<Camera>();
     }
 
     void Update()
