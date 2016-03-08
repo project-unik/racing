@@ -10,34 +10,39 @@
  *
  * - Make camera follow the Z-direction of the target object
  */
- 
+
 using UnityEngine;
 using UnityEngine.Assertions;
 using System.Collections;
 
-public class CameraBehaviour : MonoBehaviour {
-  
-  /*!
-   * The target #GameObject that the camera will follow. Must
-   * have a #Rigidbody component.
-   */
-  public GameObject targetObject;
+public class CameraBehaviour : MonoBehaviour
+{
+    private Rigidbody rb;
+    private Camera cam;
 
-  /*!
-   * The initial camera offset. This is autoamtically initialized in #Start().
-   */
-  public Vector3 cameraOffset;
+    /*!
+     * The target #GameObject that the camera will follow. Must
+     * have a #Rigidbody component.
+     */
+    public GameObject targetObject;
 
-	void Start () {
+    /*!
+     * The initial camera offset. This is autoamtically initialized in #Start().
+     */
+    public Vector3 cameraOffset;
+
+    void Start()
+    {
         Assert.IsNotNull(targetObject);
-	    Assert.IsNotNull(targetObject.GetComponent<Rigidbody>());
+        Assert.IsNotNull(targetObject.GetComponent<Rigidbody>());
         Assert.IsNotNull(this.GetComponent<Camera>());
         cameraOffset = this.transform.position - targetObject.transform.position;
-	}
-	
-	void FixedUpdate () {
-        Rigidbody rb = targetObject.GetComponent<Rigidbody>();
-        Camera cam = this.GetComponent<Camera>();
+        rb = targetObject.GetComponent<Rigidbody>();
+        cam = this.GetComponent<Camera>();
+    }
+
+    void Update()
+    {
         this.transform.position = rb.position + cameraOffset;
-	}
+    }
 }
