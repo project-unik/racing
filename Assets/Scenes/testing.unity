@@ -249,14 +249,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59c2ce6726878c14d85a80adfe31bef4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 0}
   repellStrength: 10
   hoverStability: 0.3
   hoverSpeed: 2
   airFriction: 5
-  speedForward: 10
-  speedBackward: 10
-  speedSide: 8
+  accForward: 20
+  accBackward: 10
+  accSide: 14
 --- !u!54 &425048815
 Rigidbody:
   m_ObjectHideFlags: 0

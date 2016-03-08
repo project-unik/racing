@@ -23,9 +23,9 @@ public class RacerBehaviour : MonoBehaviour
     public float hoverStability = 0.3f;
     public float hoverSpeed = 2.0f;
     public float airFriction = 1.0f;
-    public float speedForward = 10.0f;
-    public float speedBackward = 10.0f;
-    public float speedSide = 8.0f;
+    public float accForward = 20.0f;
+    public float accBackward = 10.0f;
+    public float accSide = 14.0f;
 
     void Start()
     {
@@ -60,19 +60,19 @@ public class RacerBehaviour : MonoBehaviour
         // Handle player input for acceleration.
         if (Input.GetKey(KeyCode.W))
         {
-            rb.velocity += new Vector3(0, 0, speedForward * Time.deltaTime);
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            rb.velocity += new Vector3(-speedSide * Time.deltaTime, 0, 0);
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            rb.velocity += new Vector3(speedSide * Time.deltaTime, 0, 0);
+            rb.velocity += new Vector3(0, 0, Input.GetAxis("Vertical") * accForward * Time.deltaTime);
         }
         if (Input.GetKey(KeyCode.S))
         {
-            rb.velocity += new Vector3(0, 0, -speedBackward * Time.deltaTime);
+            rb.velocity += new Vector3(0, 0, Input.GetAxis("Vertical") * accBackward * Time.deltaTime);
+        }
+        if (Input.GetKey(KeyCode.A))
+        {
+            rb.velocity += new Vector3(Input.GetAxis("Horizontal") * accSide * Time.deltaTime, 0, 0);
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            rb.velocity += new Vector3(Input.GetAxis("Horizontal") * accSide * Time.deltaTime, 0, 0);
         }
     }
 
