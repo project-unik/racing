@@ -29,15 +29,15 @@ public class CameraBehaviour : MonoBehaviour {
   public Vector3 cameraOffset;
 
 	void Start () {
-    Assert.IsNotNull(targetObject);
-	  Assert.IsNotNull(targetObject.GetComponent<Rigidbody>());
-    Assert.IsNotNull(this.GetComponent<Camera>());
-    cameraOffset = this.transform.position - targetObject.transform.position;
+        Assert.IsNotNull(targetObject);
+	    Assert.IsNotNull(targetObject.GetComponent<Rigidbody>());
+        Assert.IsNotNull(this.GetComponent<Camera>());
+        cameraOffset = this.transform.position - targetObject.transform.position;
 	}
 	
 	void FixedUpdate () {
-	  Rigidbody rb = targetObject.GetComponent<Rigidbody>();
-    Camera cam = this.GetComponent<Camera>();
-    this.transform.position = rb.position + cameraOffset;
+        Rigidbody rb = targetObject.GetComponent<Rigidbody>();
+        Camera cam = this.GetComponent<Camera>();
+        this.transform.position = rb.position + cameraOffset;
 	}
 }

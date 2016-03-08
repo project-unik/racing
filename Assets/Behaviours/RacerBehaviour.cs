@@ -27,7 +27,7 @@ public class RacerBehaviour : MonoBehaviour {
   public float speedSide = 8.0f;
 
 	void Start() {
-    rb = this.GetComponent<Rigidbody>();
+        rb = this.GetComponent<Rigidbody>();
 	}
 	
 
