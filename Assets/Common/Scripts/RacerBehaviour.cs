@@ -58,22 +58,25 @@ public class RacerBehaviour : MonoBehaviour
         rb.AddForce(Vector3.Scale(-rb.velocity.normalized, new Vector3(f, f, f)), ForceMode.VelocityChange);
 
         // Handle player input for acceleration.
-        if (Input.GetKey(KeyCode.W))
+        float vertical = Input.GetAxis("Vertical");
+        if (vertical != 0)
         {
-            rb.velocity += new Vector3(0, 0, Input.GetAxis("Vertical") * accForward * Time.deltaTime);
+            //accelerate forward
+            if (vertical > 0)
+            {
+                rb.velocity += new Vector3(0, 0, vertical * accForward * Time.deltaTime);
+            }
+            //accelerate backward
+            else
+            {
+                rb.velocity += new Vector3(0, 0, vertical * accBackward * Time.deltaTime);
+            }
         }
-        if (Input.GetKey(KeyCode.S))
+        float horizontal = Input.GetAxis("Horizontal");
+        if (horizontal != 0)
         {
-            rb.velocity += new Vector3(0, 0, Input.GetAxis("Vertical") * accBackward * Time.deltaTime);
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            rb.velocity += new Vector3(Input.GetAxis("Horizontal") * accSide * Time.deltaTime, 0, 0);
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            rb.velocity += new Vector3(Input.GetAxis("Horizontal") * accSide * Time.deltaTime, 0, 0);
+            //accelerate sideward
+            rb.velocity += new Vector3(horizontal * accSide * Time.deltaTime, 0, 0);
         }
     }
-
 }
