@@ -104,11 +104,12 @@ public class RacerBehaviour : MonoBehaviour
         Vector3 upVector;
         if (Physics.Raycast(this.transform.position, -transform.up, out hit))
         {
-            if (hit.distance < hoverHeight)
+
+            // Add force to make the vehicle hover over the ground.
+            // http://answers.unity3d.com/questions/46024/maintain-heightaltitudedistance-from-ground.html
+            if (hit.distance < 2.0f * hoverHeight)
             {
-                // Add force to make the vehicle hover over the ground.
-                // http://answers.unity3d.com/questions/46024/maintain-heightaltitudedistance-from-ground.html
-                rigidBody.AddForce(transform.up * (hoverForce / (hit.distance * 0.5f)));
+                rigidBody.AddForce(-transform.up * hoverForce * Mathf.Pow(hit.distance - hoverHeight, 3.0f));
             }
             upVector = hit.normal;
         }
