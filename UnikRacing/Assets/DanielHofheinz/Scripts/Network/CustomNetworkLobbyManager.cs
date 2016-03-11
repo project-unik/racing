@@ -29,7 +29,9 @@ namespace Rafiwui.Networking
         #endregion
 
         #region Privat Variables
+
         private RectTransform activePanel;
+
         #endregion
 
         #region Coroutines
