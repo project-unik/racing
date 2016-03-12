@@ -24,7 +24,7 @@ namespace Rafiwui.Networking
         public RectTransform mainPanel;
         public RectTransform searchServerPanel;
         public RectTransform serverLobbyPanel;
-        public Text countdown;
+        //public Text countdown;
 
         #endregion
 
@@ -41,6 +41,11 @@ namespace Rafiwui.Networking
         }
         #endregion
 
+        void Awake()
+        {
+            Debug.Log("Awake", this);
+        }
+
         void Start()
         {
             gameTitle.text = title;
@@ -55,13 +60,6 @@ namespace Rafiwui.Networking
         }
 
         #region OverrideFunctions
-        //TODO:
-        //-start countdown
-        //-change scene
-        public override void OnLobbyServerPlayersReady()
-        {
-            base.OnLobbyServerPlayersReady();
-        }
         #endregion
 
         #region OnClickButtonEvents
