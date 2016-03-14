@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+Official formatting settings for Visual Studio for project-unik/racing
+Import with Tools->Import and Export Settings->Import selected environment settings
+WARNING: This will override your current settings. If you want to keep them; back them up.
+-->
 <UserSettings>
   <ApplicationIdentity version="14.0"/>
   <ToolsOptions>
