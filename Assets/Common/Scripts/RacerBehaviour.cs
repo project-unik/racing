@@ -28,7 +28,7 @@ public class RacerBehaviour : MonoBehaviour
     public float hoverSpeed = 2.0f;
     public float hoverHeight = 2f;
 
-    public float airFriction = 10f;
+    public float airFriction = 5f;
 
     public float accForward = 1100;
     public float accBackward = 700f;
@@ -79,13 +79,13 @@ public class RacerBehaviour : MonoBehaviour
         if (curThrust != 0)
         {
             //apply force forward/backward
-            rigidBody.AddForce(transform.forward * curThrust * Time.deltaTime);
+            rigidBody.AddForce(transform.forward * curThrust * Time.deltaTime, ForceMode.Acceleration);
         }
 
         if (curTurn != 0)
         {
             //turn the racer
-            rigidBody.AddRelativeTorque(transform.up * curTurn * Time.deltaTime);
+            rigidBody.AddRelativeTorque(transform.up * curTurn * Time.deltaTime, ForceMode.Acceleration);
         }
         else
         {
@@ -109,7 +109,7 @@ public class RacerBehaviour : MonoBehaviour
             // Enable upside-down driving by applying force even if the vehicle is above hoverHeight
             if (hit.distance < 2.0f * hoverHeight)
             {
-                rigidBody.AddForce(-transform.up * hoverForce * Mathf.Pow(hit.distance - hoverHeight, 3.0f));
+                rigidBody.AddForce(-transform.up * hoverForce * Mathf.Pow(hit.distance - hoverHeight, 3.0f), ForceMode.Acceleration);
             }
             upVector = hit.normal;
         }
@@ -125,7 +125,7 @@ public class RacerBehaviour : MonoBehaviour
             rigidBody.angularVelocity
             ) * transform.up;
         Vector3 torque = Vector3.Cross(predictedUp, upVector);
-        rigidBody.AddTorque(torque * hoverSpeed * hoverSpeed);
+        rigidBody.AddTorque(torque * hoverSpeed * hoverSpeed, ForceMode.Acceleration);
 
     }
 }
