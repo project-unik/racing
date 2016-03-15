@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class RespawnPoint : MonoBehaviour {
+public class RespawnPoint : MonoBehaviour
+{
 
     public float yOffset = 3.0f;
 

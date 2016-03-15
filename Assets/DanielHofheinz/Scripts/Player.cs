@@ -2,7 +2,8 @@
 using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Player : MonoBehaviour {
+public class Player : MonoBehaviour
+{
 
     public bool firstPerson;
     public float acceleration = 25;

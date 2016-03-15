@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Respawn : MonoBehaviour {
+public class Respawn : MonoBehaviour
+{
 
     private Transform startPosition;
-    private Vector3 respawnPoint = new Vector3(-10000,-10000,-10000);
+    private Vector3 respawnPoint = new Vector3(-10000, -10000, -10000);
 
     IEnumerator RespawnCountdown()
     {
@@ -41,7 +42,7 @@ public class Respawn : MonoBehaviour {
     void OnTriggerExit(Collider other)
     {
         RespawnPoint respawnPosition = other.GetComponent<RespawnPoint>();
-        if(respawnPosition == null)
+        if (respawnPosition == null)
         {
             return;
         }

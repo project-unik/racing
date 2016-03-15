@@ -70,7 +70,7 @@ namespace Rafiwui.Networking
 
         private void ChangePanelTo(RectTransform panel)
         {
-            if(activePanel.gameObject.tag != TagManager.MainPanel)
+            if (activePanel.gameObject.tag != TagManager.MainPanel)
             {
                 activePanel.anchorMin = Vector2.one;
                 activePanel.anchorMax = Vector2.one * 2;
