@@ -22,6 +22,7 @@ public class Player : MonoBehaviour {
     void Awake()
     {
         rbPlayer = gameObject.GetComponent<Rigidbody>();
+        GameManager.Moveable = true;
     }
 
     void Start()
@@ -42,6 +43,11 @@ public class Player : MonoBehaviour {
 
     void FixedUpdate()
     {
+        if (!GameManager.Moveable)
+        {
+            return;
+        }
+
         if (Input.GetButton(InputManager.Accelerate))
         {
             Accelerate();
@@ -60,6 +66,10 @@ public class Player : MonoBehaviour {
         }
     }
 
+    #region Public Methods
+    #endregion
+
+    #region Private Methods
     private void Accelerate()
     {
         if (transform.InverseTransformDirection(rbPlayer.velocity).z < MaxSpeed)
@@ -84,5 +94,6 @@ public class Player : MonoBehaviour {
             rbPlayer.velocity = Vector3.zero;
         }
     }
+    #endregion
 
 }
