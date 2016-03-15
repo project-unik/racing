@@ -5,7 +5,7 @@ Import with Tools->Import and Export Settings->Import selected environment setti
 WARNING: This will override your current C# and C# editor settings. If you want to keep them; back them up.
 -->
 <UserSettings>
-  <ApplicationIdentity version="14.0"/>
+  <ApplicationIdentity version="12.0"/>
   <ToolsOptions>
     <ToolsOptionsCategory name="TextEditor" RegisteredName="TextEditor">
       <ToolsOptionsSubCategory name="CSharp" RegisteredName="CSharp" PackageName="Text Management Package">
