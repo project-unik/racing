@@ -22,6 +22,7 @@ public class RacerBehaviour : MonoBehaviour
     private float accDeadZone = 0.1f;
     private float curThrust = 0.0f;
     private float curTurn = 0.0f;
+    private Transform[] hoverPoints;
 
     public float hoverForce = 2f;
     public float hoverStability = 0.3f;
@@ -36,14 +37,12 @@ public class RacerBehaviour : MonoBehaviour
     public float turnStrength = 25f;
     public float slowDownTurn = 12f;
 
-    private Transform[] hoverPoints;
-
     void Start()
     {
         rigidBody = this.GetComponent<Rigidbody>();
         int i = 0;
         hoverPoints = new Transform[4];
-        foreach(Transform child in transform)
+        foreach (Transform child in transform)
         {
             hoverPoints[i++] = child;
         }
@@ -113,7 +112,7 @@ public class RacerBehaviour : MonoBehaviour
             Transform hoverPoint = hoverPoints[i];
             RaycastHit hit;
             Vector3 upVector;
-            if (Physics.Raycast(hoverPoint.position, -hoverPoint.up, out hit,hoverHeight))
+            if (Physics.Raycast(hoverPoint.position, -hoverPoint.up, out hit, hoverHeight))
             {
 
                 // Add force to make the vehicle hover over the ground.
@@ -125,10 +124,6 @@ public class RacerBehaviour : MonoBehaviour
                 if (transform.position.y > hoverPoint.position.y)
                 {
                     rigidBody.AddForceAtPosition(hoverPoint.up * hoverForce, hoverPoint.position);
-                }
-                else
-                {
-                    rigidBody.AddForceAtPosition(hoverPoint.up * -hoverForce, hoverPoint.position);
                 }
                 upVector = hoverPoint.up;
             }
