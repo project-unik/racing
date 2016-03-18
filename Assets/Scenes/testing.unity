@@ -253,16 +253,11 @@ MonoBehaviour:
   hoverStability: 0.3
   hoverSpeed: 2
   hoverHeight: 2
-  airFriction: 10
+  airFriction: {x: 5, y: 5, z: 7}
   accForward: 1100
   accBackward: 700
   turnStrength: 25
   slowDownTurn: 12
-  hoverPoints:
-  - {fileID: 810309073}
-  - {fileID: 1031413558}
-  - {fileID: 1687394868}
-  - {fileID: 1337422372}
 --- !u!54 &425048815
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -409,7 +404,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 810309073}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: -0.743, z: 0.497}
+  m_LocalPosition: {x: 0.5, y: -0.5, z: 0.5}
   m_LocalScale: {x: 0.090913296, y: 0.090913296, z: 0.090913296}
   m_Children: []
   m_Father: {fileID: 425048819}
@@ -584,7 +579,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1031413558}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.498, y: -0.7430001, z: 0.4970003}
+  m_LocalPosition: {x: -0.5, y: -0.5, z: 0.5}
   m_LocalScale: {x: 0.090913296, y: 0.0909133, z: 0.0909133}
   m_Children: []
   m_Father: {fileID: 425048819}
@@ -734,7 +729,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1337422372}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.49999943, y: -0.7430001, z: -0.497}
+  m_LocalPosition: {x: 0.5, y: -0.5, z: -0.5}
   m_LocalScale: {x: 0.090913296, y: 0.0909133, z: 0.0909133}
   m_Children: []
   m_Father: {fileID: 425048819}
@@ -809,7 +804,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1687394868}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.4979995, y: -0.7430001, z: -0.497}
+  m_LocalPosition: {x: -0.5, y: -0.5, z: -0.5}
   m_LocalScale: {x: 0.090913296, y: 0.09091331, z: 0.09091331}
   m_Children: []
   m_Father: {fileID: 425048819}
