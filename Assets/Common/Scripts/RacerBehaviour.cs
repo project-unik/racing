@@ -57,7 +57,8 @@ public class RacerBehaviour : MonoBehaviour
             //set thrust forward
             curThrust = vertical * accForward;
         }
-        else if (vertical < -accDeadZone)
+        // do not apply backwards thrust when in air
+        else if (vertical < -accDeadZone && Physics.Raycast(transform.position, -transform.up, 1.5f * hoverHeight))
         {
             //set thrust backward
             curThrust = vertical * accBackward;
