@@ -28,7 +28,7 @@ public class RacerBehaviour : MonoBehaviour
     public float hoverSpeed = 2.0f;
     public float hoverHeight = 2f;
 
-    public float airFriction = 5f;
+    public Vector3 airFriction = new Vector3(5f, 5f, 7f);
 
     public float accForward = 1100;
     public float accBackward = 700f;
@@ -96,8 +96,8 @@ public class RacerBehaviour : MonoBehaviour
         }
 
         // Add air friction to slow down the vehicle over time.
-        float airForce = airFriction * Time.deltaTime;
-        rigidBody.AddForce(Vector3.Scale(-rigidBody.velocity.normalized, new Vector3(airForce, airForce, airForce)), ForceMode.VelocityChange);
+        Vector3 airForce = airFriction * Time.deltaTime;
+        rigidBody.AddForce(Vector3.Scale(-rigidBody.velocity.normalized, airForce), ForceMode.VelocityChange);
 
         //hovering
         RaycastHit hit;
