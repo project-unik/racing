@@ -249,7 +249,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59c2ce6726878c14d85a80adfe31bef4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverForce: 10
+  hoverForce: 15
   hoverStability: 0.3
   hoverSpeed: 2
   hoverHeight: 2
@@ -428,8 +428,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d0ebc6ac2a604442ae1bbd84cd5a1d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cameraDistance: 0
+  cameraVerticalOffset: 0
+  maxDownRotation: 0.5
+  maxUpRotation: 0.5
+  limitUpDownRotation: 1
+  allowUpDownRotation: 1
+  DEBUG_Y: 0
+  targetRigidbody: {fileID: 0}
   targetObject: {fileID: 425048813}
-  cameraOffset: {x: 0, y: 0, z: 0}
+  trackObject: {fileID: 0}
 --- !u!1 &1032479823
 GameObject:
   m_ObjectHideFlags: 0
