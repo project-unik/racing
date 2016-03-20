@@ -51,7 +51,7 @@ public class RacerBehaviour : MonoBehaviour
     void Update()
     {
         // Handle player input for acceleration.
-        float vertical = Input.GetAxis("Vertical");
+        float vertical = Input.GetAxis(Tags.Input.VERTICAL);
         if (vertical > accDeadZone)
         {
             //set thrust forward
@@ -69,7 +69,7 @@ public class RacerBehaviour : MonoBehaviour
             curThrust = 0;
         }
 
-        float horizontal = Input.GetAxis("Horizontal");
+        float horizontal = Input.GetAxis(Tags.Input.HORIZONTAL);
         if (Mathf.Abs(horizontal) > accDeadZone)
         {
             //turn sideward
