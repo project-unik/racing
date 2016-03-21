@@ -22,35 +22,43 @@ public class RacerBehaviour : MonoBehaviour
     private float accDeadZone = 0.1f;
     private float curThrust = 0.0f;
     private float curTurn = 0.0f;
+    private Transform[] hoverPoints;
 
-    public float hoverForce = 7f;
+    public float hoverForce = 2f;
     public float hoverStability = 0.3f;
     public float hoverSpeed = 2.0f;
     public float hoverHeight = 2f;
 
-    public float airFriction = 10f;
+    public Vector3 airFriction = new Vector3(5f, 5f, 7f);
 
     public float accForward = 1100;
     public float accBackward = 700f;
 
-    public float turnStrength = 16f;
+    public float turnStrength = 25f;
     public float slowDownTurn = 12f;
 
     void Start()
     {
         rigidBody = this.GetComponent<Rigidbody>();
+        int i = 0;
+        hoverPoints = new Transform[4];
+        foreach (Transform child in transform)
+        {
+            hoverPoints[i++] = child;
+        }
     }
 
     void Update()
     {
         // Handle player input for acceleration.
-        float vertical = Input.GetAxis("Vertical");
+        float vertical = Input.GetAxis(Tags.Input.VERTICAL);
         if (vertical > accDeadZone)
         {
             //set thrust forward
             curThrust = vertical * accForward;
         }
-        else if (vertical < -accDeadZone)
+        // do not apply backwards thrust when in air
+        else if (vertical < -accDeadZone && Physics.Raycast(transform.position, -transform.up, 1.5f * hoverHeight))
         {
             //set thrust backward
             curThrust = vertical * accBackward;
@@ -61,7 +69,7 @@ public class RacerBehaviour : MonoBehaviour
             curThrust = 0;
         }
 
-        float horizontal = Input.GetAxis("Horizontal");
+        float horizontal = Input.GetAxis(Tags.Input.HORIZONTAL);
         if (Mathf.Abs(horizontal) > accDeadZone)
         {
             //turn sideward
@@ -79,13 +87,13 @@ public class RacerBehaviour : MonoBehaviour
         if (curThrust != 0)
         {
             //apply force forward/backward
-            rigidBody.AddForce(transform.forward * curThrust * Time.deltaTime);
+            rigidBody.AddForce(transform.forward * curThrust * Time.deltaTime, ForceMode.Acceleration);
         }
 
         if (curTurn != 0)
         {
             //turn the racer
-            rigidBody.AddRelativeTorque(transform.up * curTurn * Time.deltaTime);
+            rigidBody.AddRelativeTorque(transform.up * curTurn * Time.deltaTime, ForceMode.Acceleration);
         }
         else
         {
@@ -96,36 +104,38 @@ public class RacerBehaviour : MonoBehaviour
         }
 
         // Add air friction to slow down the vehicle over time.
-        float airForce = airFriction * Time.deltaTime;
-        rigidBody.AddForce(Vector3.Scale(-rigidBody.velocity.normalized, new Vector3(airForce, airForce, airForce)), ForceMode.VelocityChange);
+        Vector3 airForce = airFriction * Time.deltaTime;
+        rigidBody.AddForce(Vector3.Scale(-rigidBody.velocity.normalized, airForce), ForceMode.VelocityChange);
 
         //hovering
-        RaycastHit hit;
-        Vector3 upVector;
-        if (Physics.Raycast(this.transform.position, -transform.up, out hit))
+        for (int i = 0; i < hoverPoints.Length; ++i)
         {
-
-            // Add force to make the vehicle hover over the ground.
-            // http://answers.unity3d.com/questions/46024/maintain-heightaltitudedistance-from-ground.html
-            if (hit.distance < 2.0f * hoverHeight)
+            Transform hoverPoint = hoverPoints[i];
+            RaycastHit hit;
+            Vector3 upVector;
+            if (Physics.Raycast(hoverPoint.position, -hoverPoint.up, out hit, hoverHeight))
             {
-                rigidBody.AddForce(-transform.up * hoverForce * Mathf.Pow(hit.distance - hoverHeight, 3.0f));
+
+                // Add force to make the vehicle hover over the ground.
+                rigidBody.AddForceAtPosition(-hoverPoint.up * hoverForce * Mathf.Pow(hit.distance - hoverHeight, 3.0f), hoverPoint.position, ForceMode.Acceleration);
+                upVector = hit.normal;
             }
-            upVector = hit.normal;
+            else
+            {
+                if (transform.position.y > hoverPoint.position.y)
+                {
+                    rigidBody.AddForceAtPosition(hoverPoint.up * hoverForce, hoverPoint.position);
+                }
+                upVector = hoverPoint.up;
+            }
+            // Add force to stabilize the vehicle in the air.
+            // http://answers.unity3d.com/questions/10425/how-to-stabilize-angular-motion-alignment-of-hover.html
+            Vector3 predictedUp = Quaternion.AngleAxis(
+                rigidBody.angularVelocity.magnitude * Mathf.Rad2Deg * hoverStability / hoverSpeed,
+                rigidBody.angularVelocity
+                ) * upVector;
+            Vector3 torque = Vector3.Cross(predictedUp, upVector);
+            rigidBody.AddTorque(torque * hoverSpeed * hoverSpeed, ForceMode.Acceleration);
         }
-        else
-        {
-            upVector = transform.up;
-        }
-
-        // Add force to stabilize the vehicle in the air.
-        // http://answers.unity3d.com/questions/10425/how-to-stabilize-angular-motion-alignment-of-hover.html
-        Vector3 predictedUp = Quaternion.AngleAxis(
-            rigidBody.angularVelocity.magnitude * Mathf.Rad2Deg * hoverStability / hoverSpeed,
-            rigidBody.angularVelocity
-            ) * transform.up;
-        Vector3 torque = Vector3.Cross(predictedUp, upVector);
-        rigidBody.AddTorque(torque * hoverSpeed * hoverSpeed);
-
     }
 }
