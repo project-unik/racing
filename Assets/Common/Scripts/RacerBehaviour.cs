@@ -28,6 +28,7 @@ public class RacerBehaviour : MonoBehaviour
     public float hoverStability = 0.3f;
     public float hoverSpeed = 2.0f;
     public float hoverHeight = 2f;
+    public float tipOverStability = 100.0f;
 
     public Vector3 airFriction = new Vector3(5f, 5f, 7f);
 
@@ -124,7 +125,7 @@ public class RacerBehaviour : MonoBehaviour
             {
                 if (transform.position.y > hoverPoint.position.y)
                 {
-                    rigidBody.AddForceAtPosition(hoverPoint.up * hoverForce, hoverPoint.position);
+                    rigidBody.AddForceAtPosition(hoverPoint.up * tipOverStability, hoverPoint.position);
                 }
                 upVector = hoverPoint.up;
             }
