@@ -32,11 +32,14 @@ public class RacerBehaviour : MonoBehaviour
 
     public Vector3 airFriction = new Vector3(5f, 5f, 7f);
 
+    public float maxSpeed = 100f;
     public float accForward = 1100;
     public float accBackward = 700f;
 
     public float turnStrength = 25f;
     public float slowDownTurn = 12f;
+    [Range(0.0f, 1.0f)]
+    public float turnSharpness = 0.8f;
 
     void Start()
     {
@@ -85,7 +88,7 @@ public class RacerBehaviour : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (curThrust != 0)
+        if (curThrust != 0 && rigidBody.velocity.magnitude <= maxSpeed)
         {
             //apply force forward/backward
             rigidBody.AddForce(transform.forward * curThrust * Time.deltaTime, ForceMode.Acceleration);
@@ -95,6 +98,9 @@ public class RacerBehaviour : MonoBehaviour
         {
             //turn the racer
             rigidBody.AddRelativeTorque(transform.up * curTurn * Time.deltaTime, ForceMode.Acceleration);
+            Vector3 newDirection = (turnSharpness * transform.forward.normalized) + ((1 - turnSharpness) * rigidBody.velocity.normalized);
+            newDirection = newDirection.normalized;
+            rigidBody.velocity = newDirection * rigidBody.velocity.magnitude;
         }
         else
         {
