@@ -40,6 +40,7 @@ public class RacerBehaviour : MonoBehaviour
     public float slowDownTurn = 12f;
     [Range(0.0f, 1.0f)]
     public float turnSharpness = 0.8f;
+    public float turnSlowdown = 1.5f;
 
     void Start()
     {
@@ -100,7 +101,8 @@ public class RacerBehaviour : MonoBehaviour
             rigidBody.AddRelativeTorque(transform.up * curTurn * Time.deltaTime, ForceMode.Acceleration);
             Vector3 newDirection = (turnSharpness * transform.forward.normalized) + ((1 - turnSharpness) * rigidBody.velocity.normalized);
             newDirection = newDirection.normalized;
-            rigidBody.velocity = newDirection * rigidBody.velocity.magnitude;
+            float turnAngle = Vector3.Angle(newDirection, rigidBody.velocity);
+            rigidBody.velocity = newDirection * rigidBody.velocity.magnitude * (1 - (turnAngle/360) * turnSlowdown) ;
         }
         else
         {
