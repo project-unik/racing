@@ -1,0 +1,20 @@
+﻿using UnityEngine;
+using UnityEngine.UI;
+
+public class SpeedoMeter : MonoBehaviour
+{
+
+    private Rigidbody rigidBody;
+    public Text speedoMeter;
+
+    void Start()
+    {
+        rigidBody = this.GetComponent<Rigidbody>();
+    }
+
+    void Update()
+    {
+        // Conversion from m/s to k/h is 3.6
+        speedoMeter.text = Mathf.RoundToInt(rigidBody.velocity.magnitude * 3.6f).ToString() + " kph";
+    }
+}
