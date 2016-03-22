@@ -101,7 +101,7 @@ public class RacerBehaviour : MonoBehaviour
             rigidBody.AddRelativeTorque(transform.up * curTurn * Time.deltaTime, ForceMode.Acceleration);
             Vector3 newDirection = (turnSharpness * transform.forward.normalized) + ((1 - turnSharpness) * rigidBody.velocity.normalized);
             newDirection = newDirection.normalized;
-            float turnAngle = Vector3.Angle(newDirection, rigidBody.velocity);
+            float turnAngle = Mathf.Abs(Vector3.Angle(newDirection, rigidBody.velocity));
             rigidBody.velocity = newDirection * rigidBody.velocity.magnitude * (1 - (turnAngle/360) * turnSlowdown) ;
         }
         else
