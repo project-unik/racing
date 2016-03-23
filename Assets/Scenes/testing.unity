@@ -347,11 +347,11 @@ MonoBehaviour:
   maxSpeed: 60
   accForward: 1100
   accBackward: 700
-  brakeForce: 0.5
+  brakeStrength: 50
   turnStrength: 75
   slowDownTurn: 12
   turnSharpness: 0.8
-  turnSlowdown: 5
+  speedSlowdownOnTurn: 5
 --- !u!54 &425048815
 Rigidbody:
   m_ObjectHideFlags: 0
