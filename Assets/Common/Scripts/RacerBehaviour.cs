@@ -36,7 +36,7 @@ public class RacerBehaviour : MonoBehaviour
     public float maxSpeed = 60f;
     public float accForward = 1100;
     public float accBackward = 700f;
-    public float brakeStrength = 0.5f;
+    public float brakeStrength = 50f;
 
     public float turnStrength = 75f;
     public float slowDownTurn = 12f;
@@ -101,7 +101,7 @@ public class RacerBehaviour : MonoBehaviour
         // braking
         else if (curThrust < 0f && isGoingForward)
         {
-           rigidBody.AddForce(transform.forward * curThrust * Mathf.Pow(rigidBody.velocity.magnitude * brakeStrength, 2.0f) * Time.deltaTime);
+           rigidBody.AddForce(-transform.forward * brakeStrength * rigidBody.velocity.magnitude * Time.deltaTime, ForceMode.Acceleration);
         }
         // going backward
         else
