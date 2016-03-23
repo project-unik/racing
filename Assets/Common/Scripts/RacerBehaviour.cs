@@ -23,6 +23,7 @@ public class RacerBehaviour : MonoBehaviour
     private float curThrust = 0.0f;
     private float curTurn = 0.0f;
     private Transform[] hoverPoints;
+    private bool isGoingForward;
 
     public float hoverForce = 2f;
     public float hoverStability = 0.3f;
@@ -85,13 +86,26 @@ public class RacerBehaviour : MonoBehaviour
             //do not turn sideward
             curTurn = 0;
         }
+
+        isGoingForward = Mathf.Abs(Vector3.Angle(transform.forward, rigidBody.velocity)) <= 80.0f && rigidBody.velocity.magnitude > 0.0f;
     }
 
     void FixedUpdate()
     {
-        if (curThrust != 0 && rigidBody.velocity.magnitude <= maxSpeed)
+        // going forward
+        if (curThrust >= 0f && rigidBody.velocity.magnitude <= maxSpeed)
         {
             //apply force forward/backward
+            rigidBody.AddForce(transform.forward * curThrust * Time.deltaTime, ForceMode.Acceleration);
+        }
+        // braking
+        else if (curThrust < 0f && isGoingForward)
+        {
+            rigidBody.AddForce(transform.forward * curThrust * Mathf.Pow(rigidBody.velocity.magnitude, 2.0f) * Time.fixedDeltaTime);
+        }
+        // going backwards
+        else
+        {
             rigidBody.AddForce(transform.forward * curThrust * Time.deltaTime, ForceMode.Acceleration);
         }
 
