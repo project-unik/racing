@@ -38,9 +38,9 @@ public class RacerBehaviour : MonoBehaviour
 
     public float turnStrength = 25f;
     public float slowDownTurn = 12f;
-    [Range(0.0f, 1.0f)]
+    [Range(0.0f, 2.0f)]
     public float turnSharpness = 0.8f;
-    public float turnSlowdown = 1.5f;
+    public float turnSlowdown = 5.0f;
 
     void Start()
     {
@@ -99,10 +99,22 @@ public class RacerBehaviour : MonoBehaviour
         {
             //turn the racer
             rigidBody.AddRelativeTorque(transform.up * curTurn * Time.deltaTime, ForceMode.Acceleration);
-            Vector3 newDirection = (turnSharpness * transform.forward.normalized) + ((1 - turnSharpness) * rigidBody.velocity.normalized);
+            Vector3 newDirection;
+            // interpolate between current velocity direction and current forward transform
+            if (turnSharpness <= 1.0f)
+            {
+                newDirection = (turnSharpness * transform.forward.normalized) + ((1.0f - turnSharpness) * rigidBody.velocity.normalized);
+            }
+            // turnSharpness is greater than 1 so the vehicle oversteers thus the current velocity direction is not relevant
+            else
+            {
+                newDirection = turnSharpness * transform.forward.normalized;
+            }
+
             newDirection = newDirection.normalized;
             float turnAngle = Mathf.Abs(Vector3.Angle(newDirection, rigidBody.velocity));
-            rigidBody.velocity = newDirection * rigidBody.velocity.magnitude * (1 - (turnAngle/360) * turnSlowdown) ;
+            // vehicle is slowed down when turning depending on angle
+            rigidBody.velocity = newDirection * rigidBody.velocity.magnitude * (1.0f - (turnAngle / 360.0f) * turnSlowdown);
         }
         else
         {

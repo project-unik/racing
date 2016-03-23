@@ -349,7 +349,7 @@ MonoBehaviour:
   accBackward: 700
   turnStrength: 100
   slowDownTurn: 12
-  turnSharpness: 1
+  turnSharpness: 0.8
   turnSlowdown: 1.5
 --- !u!54 &425048815
 Rigidbody:
