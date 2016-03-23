@@ -101,7 +101,7 @@ public class RacerBehaviour : MonoBehaviour
         // braking
         else if (curThrust < 0f && isGoingForward)
         {
-            rigidBody.AddForce(transform.forward * curThrust * Mathf.Pow(rigidBody.velocity.magnitude, 2.0f) * Time.fixedDeltaTime);
+           rigidBody.AddForce(transform.forward * curThrust * Mathf.Pow(rigidBody.velocity.magnitude, 2.0f) * Time.deltaTime);
         }
         // going backwards
         else
@@ -115,16 +115,7 @@ public class RacerBehaviour : MonoBehaviour
             rigidBody.AddRelativeTorque(transform.up * curTurn * Time.deltaTime, ForceMode.Acceleration);
             Vector3 newDirection;
             // interpolate between current velocity direction and current forward transform
-            if (turnSharpness <= 1.0f)
-            {
-                newDirection = (turnSharpness * transform.forward.normalized) + ((1.0f - turnSharpness) * rigidBody.velocity.normalized);
-            }
-            // turnSharpness is greater than 1 so the vehicle oversteers thus the current velocity direction is not relevant
-            else
-            {
-                newDirection = turnSharpness * transform.forward.normalized;
-            }
-
+            newDirection = (turnSharpness * transform.forward.normalized) + ((1.0f - turnSharpness) * rigidBody.velocity.normalized);
             newDirection = newDirection.normalized;
             float turnAngle = Mathf.Abs(Vector3.Angle(newDirection, rigidBody.velocity));
             // vehicle is slowed down when turning depending on angle
