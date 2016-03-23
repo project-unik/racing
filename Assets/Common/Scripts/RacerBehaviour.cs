@@ -43,6 +43,7 @@ public class RacerBehaviour : MonoBehaviour
     [Range(0.0f, 2.0f)]
     public float turnSharpness = 0.8f;
     public float speedSlowdownOnTurn = 5.0f;
+    public float maxSpeedSlowdownOnTurn = 2.0f;
 
     void Start()
     {
@@ -119,7 +120,8 @@ public class RacerBehaviour : MonoBehaviour
             newDirection = newDirection.normalized;
             float turnAngle = Vector3.Angle(newDirection, rigidBody.velocity);
             // vehicle is slowed down when turning depending on angle
-            rigidBody.velocity = newDirection * rigidBody.velocity.magnitude * Mathf.Max(0.5f, (1.0f - (turnAngle / 360.0f) * speedSlowdownOnTurn));
+            float slowDown = Mathf.Max(1.0f / maxSpeedSlowdownOnTurn, (1.0f - (turnAngle / 360.0f) * speedSlowdownOnTurn));
+            rigidBody.velocity = newDirection * rigidBody.velocity.magnitude * slowDown;
         }
         else
         {
