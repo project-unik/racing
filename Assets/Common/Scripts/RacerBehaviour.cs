@@ -23,7 +23,7 @@ public class RacerBehaviour : MonoBehaviour
     private float curThrust = 0.0f;
     private float curTurn = 0.0f;
     private Transform[] hoverPoints;
-    private bool isGoingForward;
+    private bool isGoingForward = true;
 
     public float hoverForce = 2f;
     public float hoverStability = 0.3f;
@@ -42,7 +42,7 @@ public class RacerBehaviour : MonoBehaviour
     public float slowDownTurn = 12f;
     [Range(0.0f, 2.0f)]
     public float turnSharpness = 0.8f;
-    public float speedSlowdownOnTurn = 5.0f;
+    public float speedSlowdownOnTurn = 2.0f;
     public float maxSpeedSlowdownOnTurn = 2.0f;
 
     void Start()
@@ -89,7 +89,7 @@ public class RacerBehaviour : MonoBehaviour
             curTurn = 0;
         }
 
-        isGoingForward = Vector3.Angle(transform.forward, rigidBody.velocity) <= 60.0f && rigidBody.velocity.magnitude > 0.0f;
+        isGoingForward = Vector3.Angle(transform.forward, rigidBody.velocity) <= 60.0f;
     }
 
     void FixedUpdate()
@@ -102,7 +102,7 @@ public class RacerBehaviour : MonoBehaviour
         // braking
         else if (curThrust < 0f && isGoingForward)
         {
-           rigidBody.AddForce(-transform.forward * brakeStrength * rigidBody.velocity.magnitude * Time.deltaTime, ForceMode.Acceleration);
+            rigidBody.AddForce(-transform.forward * brakeStrength * rigidBody.velocity.magnitude * Time.deltaTime, ForceMode.Acceleration);
         }
         // going backward
         else
@@ -114,14 +114,6 @@ public class RacerBehaviour : MonoBehaviour
         {
             //turn the racer
             rigidBody.AddRelativeTorque(transform.up * curTurn * Time.deltaTime, ForceMode.Acceleration);
-            Vector3 newDirection;
-            // interpolate between current velocity direction and current forward transform
-            newDirection = (turnSharpness * transform.forward.normalized) + ((1.0f - turnSharpness) * rigidBody.velocity.normalized);
-            newDirection = newDirection.normalized;
-            float turnAngle = Vector3.Angle(newDirection, rigidBody.velocity);
-            // vehicle is slowed down when turning depending on angle
-            float slowDown = Mathf.Max(1.0f / maxSpeedSlowdownOnTurn, (1.0f - (turnAngle / 360.0f) * speedSlowdownOnTurn));
-            rigidBody.velocity = newDirection * rigidBody.velocity.magnitude * slowDown;
         }
         else
         {
@@ -129,6 +121,19 @@ public class RacerBehaviour : MonoBehaviour
             Vector3 angVel = rigidBody.angularVelocity;
             angVel.y = angVel.y - angVel.y * slowDownTurn * Time.deltaTime;
             rigidBody.angularVelocity = angVel;
+        }
+
+        // Turning compensation
+        {
+            Vector3 forwardVelocity = Vector3.ProjectOnPlane(rigidBody.velocity, transform.up);
+            // interpolate between current velocity direction and current forward transform
+            float forward = isGoingForward ? 1f : -1f;
+            Vector3 newDirection = Vector3.LerpUnclamped(forwardVelocity.normalized, forward * transform.forward.normalized, turnSharpness);
+            // vehicle is slowed down when turning depending on angle
+            float turnAmount = Vector3.Angle(newDirection, forwardVelocity) / 180.0f;
+            float slowDown = Mathf.Max(1.0f / maxSpeedSlowdownOnTurn, (1.0f - turnAmount * speedSlowdownOnTurn));
+            rigidBody.AddForce(-forwardVelocity, ForceMode.VelocityChange);
+            rigidBody.AddForce(newDirection * Mathf.Min(maxSpeed, forwardVelocity.magnitude) * slowDown, ForceMode.VelocityChange);
         }
 
         // Add air friction to slow down the vehicle over time.
