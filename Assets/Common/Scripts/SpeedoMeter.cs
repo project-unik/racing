@@ -16,6 +16,6 @@ public class SpeedoMeter : MonoBehaviour
     {
         // Conversion from m/s to k/h is 3.6
         Vector3 forwardVelocity = Vector3.ProjectOnPlane(rigidBody.velocity, transform.up);
-        speedoMeter.text = Mathf.RoundToInt(forwardVelocity.magnitude * 3.6f).ToString() + " kph";
+        speedoMeter.text = Mathf.FloorToInt(forwardVelocity.magnitude * 3.6f).ToString() + " kph";
     }
 }
