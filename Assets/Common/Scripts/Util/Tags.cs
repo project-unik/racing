@@ -6,6 +6,7 @@ public static class Tags {
     {
         public readonly static string HORIZONTAL = "Horizontal";
         public readonly static string VERTICAL = "Vertical";
+        public readonly static string FIRE = "Fire";
     }
 
     public static class GameObjects

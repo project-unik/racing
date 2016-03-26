@@ -15,7 +15,10 @@ public class Inventory : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if(inventory.Count>0 && Input.GetButtonUp(Tags.Input.FIRE))
+        {
+            Debug.logger.Log("Using a " + inventory.Dequeue());
+        }
     }
 
     void OnGUI()
