@@ -1,7 +1,7 @@
 ﻿/*!
  * @file Assets/Behaviours/CameraBehaviour.cs
  * @created 2016/02/28
- * @lastmodified 2016/03/12
+ * @lastmodified 2016/03/26
  * @brief Implements the camera behaviour following the player.
  *   Must be placed on the target camera object.
  *
@@ -16,72 +16,84 @@ using UnityEngine.Assertions;
 using System.Collections;
 
 [RequireComponent(typeof(Camera))]
-public class CameraBehaviour : MonoBehaviour {
-	#region camera settings
-	/// <summary>
-	/// Initial distance from <see cref="targetObject"/>. This is automatically initialized in <see cref="Start"/>.
-	/// </summary>
-	[ReadOnly]
-	[SerializeField]
-	private float cameraDistance;
+public class CameraBehaviour : MonoBehaviour
+{
+    #region camera settings
+    /// <summary>
+    /// Initial distance from <see cref="targetObject"/>. This is automatically initialized in <see cref="Start"/>.
+    /// </summary>
+    [ReadOnly]
+    [SerializeField]
+    private float cameraDistance;
 
-	/// <summary>
-	/// Initial vertical offset from <see cref="targetObject"/>. This is automatically initialized in <see cref="Start"/>.
-	/// </summary>
-	[ReadOnly]
-	[SerializeField]
-	private float cameraVerticalOffset;
+    /// <summary>
+    /// Initial vertical offset from <see cref="targetObject"/>. This is automatically initialized in <see cref="Start"/>.
+    /// </summary>
+    [ReadOnly]
+    [SerializeField]
+    private float cameraVerticalOffset;
 
-	[SerializeField]
-	[Range(0, 5)]
-	private float maxDownRotation = 1.0f;
+    [ReadOnly]
+    [SerializeField]
+    private Vector3 cameraOldTarget;
 
-	[SerializeField]
-	[Range(0, 5)]
-	private float maxUpRotation = 1.0f;
+    [SerializeField]
+    [Range(0, 1)]
+    private float updateLag = 0.5f;
 
-	[SerializeField]
-	private bool honourUpDownRotation;
-	#endregion
+    [SerializeField]
+    [Range(1, 100)]
+    private float cameraSpeed = 2.0f;
 
-	#region target object components
-	/// <summary>
-	/// The target's <see cref="Rigidbody"/> component.
-	/// </summary>
-	[ReadOnly]
-	[SerializeField]
-	private Rigidbody targetRigidbody;
+    [SerializeField]
+    private bool honourUpDownRotation;
+    #endregion
 
-	/// <summary>
-	/// The target <see cref="GameObject"/> that the camera should follow. Must have a <see cref="Rigidbody"/> component attached.
-	/// </summary>
-	[SerializeField]
-	private GameObject targetObject;
-	#endregion
+    #region target object components
+    /// <summary>
+    /// The target's <see cref="Rigidbody"/> component.
+    /// </summary>
+    [ReadOnly]
+    [SerializeField]
+    private Rigidbody targetRigidbody;
 
-	/// <summary>
-	/// <see cref="Transform"/> on the race track which is used for determining the camera's position.
-	/// </summary>
-	public Transform trackObject;
+    /// <summary>
+    /// The target <see cref="GameObject"/> that the camera should follow. Must have a <see cref="Rigidbody"/> component attached.
+    /// </summary>
+    [SerializeField]
+    private GameObject targetObject;
+    #endregion
 
-	void Start() {
-		Assert.IsNotNull(targetObject, "camera is missing a target object");
-		Assert.IsNotNull(targetRigidbody = targetObject.GetComponent<Rigidbody>(), "target object is missing a rigidbody component");
+    /// <summary>
+    /// <see cref="Transform"/> on the race track which is used for determining the camera's position.
+    /// </summary>
+    public Transform trackObject;
 
-		Vector3 diff = transform.position - targetRigidbody.position;
-		cameraDistance = Mathf.Sqrt(diff.x * diff.x + diff.z * diff.z);
-		cameraVerticalOffset = diff.y;
-	}
+    private void Start()
+    {
+        Assert.IsNotNull(targetObject, "camera is missing a target object");
+        Assert.IsNotNull(targetRigidbody = targetObject.GetComponent<Rigidbody>(), "target object is missing a rigidbody component");
 
-	void Update() {
-		Vector3 xzOffset = -targetRigidbody.transform.forward * cameraDistance;
-		if (!honourUpDownRotation) {
-			xzOffset.y = 0;
-		}
+        Vector3 diff = transform.position - targetRigidbody.position;
+        cameraDistance = Mathf.Sqrt(diff.x * diff.x + diff.z * diff.z);
+        cameraVerticalOffset = diff.y;
+        cameraOldTarget = targetRigidbody.position;
+    }
 
-		Vector3 yOffset = targetRigidbody.transform.up * cameraVerticalOffset;
+    private void Update()
+    {
+        Vector3 xzOffset = -targetRigidbody.transform.forward * cameraDistance;
 
-		transform.position = targetRigidbody.position + xzOffset + yOffset;
-		transform.LookAt(targetObject.transform);
-	}
+        if (!honourUpDownRotation)
+        {
+            xzOffset.y = 0;
+        }
+
+        Vector3 yOffset = targetRigidbody.transform.up * cameraVerticalOffset;
+        Vector3 targetPosition = targetRigidbody.position + xzOffset + yOffset;
+        Vector3 direction = targetPosition - transform.position;
+        Vector3 movement = direction * Time.deltaTime * cameraSpeed;
+
+        transform.position = transform.position.easeInOut(transform.position + movement, 1 - updateLag);
+    }
 }

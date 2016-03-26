@@ -111,7 +111,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 425048819}
-  - {fileID: 1008905434}
   m_Father: {fileID: 0}
   m_RootOrder: 3
 --- !u!1 &328522600
@@ -420,11 +419,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1008905433}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.795, z: -3.619}
+  m_LocalPosition: {x: 143.7897, y: 8.855, z: 190.86435}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 35576555}
-  m_RootOrder: 1
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
 --- !u!81 &1008905435
 AudioListener:
   m_ObjectHideFlags: 0
@@ -493,8 +492,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraDistance: 0
   cameraVerticalOffset: 0
-  maxDownRotation: 1
-  maxUpRotation: 1
+  cameraOldTarget: {x: 0, y: 0, z: 0}
+  updateLag: 0.5
+  cameraSpeed: 50
   honourUpDownRotation: 1
   targetRigidbody: {fileID: 0}
   targetObject: {fileID: 425048813}
