@@ -343,7 +343,7 @@ GameObject:
   - 23: {fileID: 731314623}
   - 114: {fileID: 731314622}
   m_Layer: 0
-  m_Name: Sphere (1)
+  m_Name: Boost (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -702,7 +702,7 @@ GameObject:
   - 23: {fileID: 1162150576}
   - 114: {fileID: 1162150580}
   m_Layer: 0
-  m_Name: Sphere
+  m_Name: Boost
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -939,7 +939,7 @@ GameObject:
   - 23: {fileID: 1759690211}
   - 114: {fileID: 1759690210}
   m_Layer: 0
-  m_Name: Sphere (2)
+  m_Name: Boost (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
