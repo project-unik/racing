@@ -24,10 +24,9 @@ public abstract class Pickup : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == Tags.GameObjects.PLAYER)
+        if (other.tag == Tags.GameObjects.PLAYER && other.transform.parent.gameObject.GetComponent<Inventory>().addPickup(getName()))
         {
             Destroy(gameObject);
-            other.transform.parent.gameObject.GetComponent<Inventory>().addPickup(getName());
         }
     }
 }

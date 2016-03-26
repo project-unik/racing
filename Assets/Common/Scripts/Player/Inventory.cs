@@ -15,18 +15,31 @@ public class Inventory : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+    }
+
+    void OnGUI()
+    {
+        int i = 1;
         foreach (string pickup in inventory)
         {
-
+            GUI.Label(new Rect(10, 15 * i, 100, 20), i++ + ". " + pickup);
         }
     }
 
-    public void addPickup(string name)
+    /// <summary>
+    /// Tries to add the passed pickup to the inventory if possible (the inventory is not full, etc.).
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns>True if the pickup was added to the inventory, false otherwise .</returns>
+    public bool addPickup(string pickupName)
     {
         if (inventory.Count < maxPickups)
         {
-            Debug.logger.Log("Picked up a " + name);
-            inventory.Enqueue(name);
+            Debug.logger.Log("Picked up a " + pickupName);
+            inventory.Enqueue(pickupName);
+            return true;
         }
+        return false;
     }
 }
