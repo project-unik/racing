@@ -89,6 +89,7 @@ public class RacerBehaviour : MonoBehaviour
             curTurn = 0;
         }
 
+        // lower than 60 to account for drifting
         isGoingForward = Vector3.Angle(transform.forward, rigidBody.velocity) <= 60.0f;
     }
 
