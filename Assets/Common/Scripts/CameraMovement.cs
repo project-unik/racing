@@ -4,6 +4,9 @@ using System.Collections;
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Modified from https://unity3d.com/learn/tutorials/projects/stealth/camera-movement
+/// </summary>
 public class CameraMovement : MonoBehaviour
 {
     public float smooth = 1.5f;         // The relative speed at which the camera will catch up.
