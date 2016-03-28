@@ -38,6 +38,9 @@ public class RacerBehaviour : MonoBehaviour
     public float turnStrength = 25f;
     public float slowDownTurn = 12f;
 
+    //maximum heigth racer may be above ground and still recieve forward thrust, as a multiplier of hoverHeight
+    public float maxThrustHeightMulti = 2; 
+
     void Start()
     {
         rigidBody = this.GetComponent<Rigidbody>();
@@ -85,6 +88,8 @@ public class RacerBehaviour : MonoBehaviour
 
     void FixedUpdate()
     {
+        handleFlying();
+
         if (curThrust != 0)
         {
             //apply force forward/backward
@@ -138,5 +143,21 @@ public class RacerBehaviour : MonoBehaviour
             Vector3 torque = Vector3.Cross(predictedUp, upVector);
             rigidBody.AddTorque(torque * hoverSpeed * hoverSpeed, ForceMode.Acceleration);
         }
+    }
+
+    void handleFlying()
+    {
+        RaycastHit hit;
+        //cast ray down
+        Physics.Raycast(transform.position, -transform.up, out hit);
+        //get distance to ground
+        float distanceToGround = hit.distance;
+
+        //disable thrust if too far away from ground
+        if(distanceToGround > maxThrustHeightMulti * hoverHeight)
+        {
+            curThrust = 0;
+        }
+
     }
 }
