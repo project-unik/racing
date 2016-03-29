@@ -38,8 +38,8 @@ public class RacerBehaviour : MonoBehaviour
     public float turnStrength = 25f;
     public float slowDownTurn = 12f;
 
-    //maximum heigth racer may be above ground and still recieve forward thrust, as a multiplier of hoverHeight
-    public float maxThrustHeightMulti = 2; 
+    //maximum height racer may be above ground and still recieve forward thrust, as a multiplier of hoverHeight
+    public float maxThrustHeightMulti = 4; 
 
     void Start()
     {
@@ -110,7 +110,8 @@ public class RacerBehaviour : MonoBehaviour
         }
 
         // Add air friction to slow down the vehicle over time.
-        Vector3 airForce = airFriction * Time.deltaTime;
+        //airForce is proportional to Veolicity Squared
+        Vector3 airForce = airFriction * rigidBody.velocity.sqrMagnitude;
         rigidBody.AddForce(Vector3.Scale(-rigidBody.velocity.normalized, airForce), ForceMode.VelocityChange);
 
         //hovering
@@ -158,6 +159,8 @@ public class RacerBehaviour : MonoBehaviour
         {
             curThrust = 0;
         }
+
+        Debug.Log("Velocity: " + (int)(rigidBody.velocity.magnitude * 3.6f) + "km/h, Height: " + distanceToGround + "m");
 
     }
 }

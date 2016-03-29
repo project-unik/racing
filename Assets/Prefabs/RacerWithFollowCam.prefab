@@ -211,7 +211,7 @@ Transform:
   m_GameObject: {fileID: 152392}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.06, y: 0.5992065, z: 3.1479447}
+  m_LocalScale: {x: 2, y: 1, z: 4}
   m_Children:
   - {fileID: 412092}
   - {fileID: 409572}
@@ -486,11 +486,12 @@ MonoBehaviour:
   hoverSpeed: 2
   hoverHeight: 2
   tipOverStability: 100
-  airFriction: {x: 5, y: 5, z: 7}
+  airFriction: {x: 0.0003, y: 0.0003, z: 0.0003}
   accForward: 1100
   accBackward: 700
   turnStrength: 100
   slowDownTurn: 12
+  maxThrustHeightMulti: 4
 --- !u!114 &11467308
 MonoBehaviour:
   m_ObjectHideFlags: 1
