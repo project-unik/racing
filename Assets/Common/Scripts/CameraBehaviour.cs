@@ -30,7 +30,7 @@ public class CameraBehaviour : MonoBehaviour
     private float smooth = 20f;
 
     /// <summary>
-    /// whether or not the camera should take the target object's up/down rotation into account when positioning itself
+    /// whether or not the camera should take the target object's up/down rotation into account when positioning
     /// </summary>
     [SerializeField]
     private bool honourUpDownRotation = true;
@@ -63,6 +63,27 @@ public class CameraBehaviour : MonoBehaviour
     /// </summary>
     [SerializeField]
     private Transform target;
+
+    /// <summary>
+    /// reference to the target's rigidbody
+    /// </summary>
+    [ReadOnly]
+    [SerializeField]
+    private Rigidbody targetRigidbody;
+
+    /// <summary>
+    /// game object which is tracked by this camera
+    /// </summary>
+    public GameObject TrackedObject
+    {
+        get { return target.gameObject; }
+        set
+        {
+            Assert.IsNotNull(value, "can't set the camera's target to null");
+            target = value.transform;
+            Assert.IsNotNull(targetRigidbody = value.GetComponent<Rigidbody>(), "new target is missing a Rigidbody component");
+        }
+    }
     #endregion
 
     #region Unity messages
@@ -74,6 +95,7 @@ public class CameraBehaviour : MonoBehaviour
             target = GameObject.FindGameObjectWithTag(Tags.GameObjects.PLAYER).transform;
         }
         Assert.IsNotNull(target, "camera is missing target transform");
+        Assert.IsNotNull(targetRigidbody = target.gameObject.GetComponent<Rigidbody>(), "target is missing a Rigidbody component");
 
         // set relative position
         Vector3 rel = transform.position - target.position;
@@ -85,8 +107,16 @@ public class CameraBehaviour : MonoBehaviour
     #region Update messages
     private void FixedUpdate()
     {
+        // check if the target is moving forward
+        bool movingForward = Vector3.Dot(target.forward, targetRigidbody.velocity) > -1;
+
         // horizontal offset from the target's position
-        Vector3 horizontalOffset = -target.forward * horizontalDistance;
+        Vector3 horizontalOffset = target.forward * horizontalDistance;
+        if (movingForward)
+        {
+            horizontalOffset.x *= -1f;
+            horizontalOffset.z *= -1f;
+        }
         if (!honourUpDownRotation)
         {
             horizontalOffset.y = 0;
