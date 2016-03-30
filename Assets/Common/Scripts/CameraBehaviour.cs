@@ -72,7 +72,7 @@ public class CameraBehaviour : MonoBehaviour
     private Rigidbody targetRigidbody;
 
     /// <summary>
-    /// game object which is tracked by this camera
+    /// <see cref="GameObject"/> which is tracked by this camera. New targets must not be null and need to have a <see cref="Rigidbody"/> component attached.
     /// </summary>
     public GameObject TrackedObject
     {
