@@ -160,6 +160,21 @@ public static class UtilityExtensions
         return Utility.EaseInOut(from, to, percentage);
     }
 
+    /// <summary>
+    /// Eases this <see cref="Vector3"/> between <code>this</code> and <code><paramref name="to"/></code>.
+    /// Equivalent to <see cref="Utility.EaseInOut(float, Vector3, Vector3, float)"/> with <code>from = this</code>,
+    /// <code>to = <paramref name="to"/></code>, <code>time = <paramref name="time"/></code> and
+    /// <code>duration = <paramref name="duration"/></code>.
+    /// </summary>
+    /// <param name="from"></param>
+    /// <param name="time">progress of the ease-in-out method</param>
+    /// <param name="to">value at <code><paramref name="time"/> = <paramref name="duration"/></code></param>
+    /// <param name="duration">duration of the whole ease-in-out method</param>
+    /// <returns>
+    /// An eased <see cref="Vector3"/> between <code>this</code> and <code><paramref name="to"/></code>,
+    /// dependent on the ratio of <code><paramref name="time"/></code> and <code><paramref name="duration"/></code>.
+    /// </returns>
+    /// <returns></returns>
     public static Vector3 EaseInOut(this Vector3 from, float time, Vector3 to, float duration)
     {
         return Utility.EaseInOut(time, from, to, duration);
