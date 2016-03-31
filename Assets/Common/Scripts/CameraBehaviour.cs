@@ -18,19 +18,16 @@ using System.Collections;
 [RequireComponent(typeof(Camera))]
 public class CameraBehaviour : MonoBehaviour {
 	#region camera settings
-	/// <summary>
-	/// Initial distance from <see cref="targetObject"/>. This is automatically initialized in <see cref="Start"/>.
-	/// </summary>
-	[ReadOnly]
-	[SerializeField]
-	private float cameraDistance;
 
 	/// <summary>
-	/// Initial vertical offset from <see cref="targetObject"/>. This is automatically initialized in <see cref="Start"/>.
+	/// Initial distance from <see cref="targetObject"/>.
 	/// </summary>
-	[ReadOnly]
-	[SerializeField]
-	private float cameraVerticalOffset;
+	private float cameraDistance = 10;
+
+	/// <summary>
+	/// Initial vertical offset from <see cref="targetObject"/>.
+	/// </summary>
+	private float cameraVerticalOffset = 2;
 
 	[SerializeField]
 	[Range(0, 5)]
@@ -46,17 +43,9 @@ public class CameraBehaviour : MonoBehaviour {
 
 	#region target object components
 	/// <summary>
-	/// The target's <see cref="Rigidbody"/> component.
+	/// The target <see cref="GameObject"/> that the camera should follow.
 	/// </summary>
-	[ReadOnly]
-	[SerializeField]
-	private Rigidbody targetRigidbody;
-
-	/// <summary>
-	/// The target <see cref="GameObject"/> that the camera should follow. Must have a <see cref="Rigidbody"/> component attached.
-	/// </summary>
-	[SerializeField]
-	private GameObject targetObject;
+	private GameObject targetObject = null;
 	#endregion
 
 	/// <summary>
@@ -64,24 +53,25 @@ public class CameraBehaviour : MonoBehaviour {
 	/// </summary>
 	public Transform trackObject;
 
-	void Start() {
-		Assert.IsNotNull(targetObject, "camera is missing a target object");
-		Assert.IsNotNull(targetRigidbody = targetObject.GetComponent<Rigidbody>(), "target object is missing a rigidbody component");
-
-		Vector3 diff = transform.position - targetRigidbody.position;
-		cameraDistance = Mathf.Sqrt(diff.x * diff.x + diff.z * diff.z);
-		cameraVerticalOffset = diff.y;
-	}
-
 	void Update() {
-		Vector3 xzOffset = -targetRigidbody.transform.forward * cameraDistance;
+        if(targetObject==null)
+        {
+            return;
+        }
+
+        Vector3 xzOffset = -targetObject.transform.forward * cameraDistance;
 		if (!honourUpDownRotation) {
 			xzOffset.y = 0;
 		}
 
-		Vector3 yOffset = targetRigidbody.transform.up * cameraVerticalOffset;
+        Vector3 yOffset = targetObject.transform.up * cameraVerticalOffset;
 
-		transform.position = targetRigidbody.position + xzOffset + yOffset;
+        transform.position = targetObject.transform.position + xzOffset + yOffset;
 		transform.LookAt(targetObject.transform);
 	}
+
+    public void SetTargetObject(GameObject targetObject)
+    {
+        this.targetObject = targetObject;
+    }
 }

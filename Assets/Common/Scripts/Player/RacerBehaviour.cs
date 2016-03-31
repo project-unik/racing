@@ -12,11 +12,12 @@
  */
 
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.Assertions;
 using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
-public class RacerBehaviour : MonoBehaviour
+public class RacerBehaviour : NetworkBehaviour
 {
     private Rigidbody rigidBody;
     private float accDeadZone = 0.1f;
@@ -38,6 +39,8 @@ public class RacerBehaviour : MonoBehaviour
     public float turnStrength = 25f;
     public float slowDownTurn = 12f;
 
+    public GameObject cameraPrefab;
+
     void Start()
     {
         rigidBody = this.GetComponent<Rigidbody>();
@@ -49,8 +52,19 @@ public class RacerBehaviour : MonoBehaviour
         }
     }
 
+    public override void OnStartLocalPlayer()
+    {
+        GetComponent<MeshRenderer>().material.color = Color.red;
+        Camera.main.GetComponent<CameraBehaviour>().SetTargetObject(gameObject);
+    }
+
     void Update()
     {
+        if(!isLocalPlayer)
+        {
+            return;
+        }
+
         // Handle player input for acceleration.
         float vertical = Input.GetAxis(Tags.Input.VERTICAL);
         if (vertical > accDeadZone)
@@ -85,6 +99,11 @@ public class RacerBehaviour : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
         if (curThrust != 0)
         {
             //apply force forward/backward
