@@ -38,12 +38,12 @@ public class RacerBehaviour : MonoBehaviour
     public float accBackward = 700f;
     public float brakeStrength = 50f;
 
-    public float turnStrength = 75f;
-    public float slowDownTurn = 12f;
-    [Range(0.0f, 2.0f)]
-    public float turnSharpness = 0.8f;
-    public float speedSlowdownOnTurn = 2.0f;
-    public float maxSpeedSlowdownOnTurn = 2.0f;
+    public float baseTurnRadius = 1.8f;
+    public float angularDrag = 7.0f;
+    public float angularDragOnTurn = 2.0f;
+    public float rotationCorrectionStrength = 3.0f;
+    [Range(0.0f, 0.1f)]
+    public float speedSlowdownOnTurn = 0.01f;
 
     void Start()
     {
@@ -54,6 +54,7 @@ public class RacerBehaviour : MonoBehaviour
         {
             hoverPoints[i++] = child;
         }
+        rigidBody.angularDrag = angularDrag;
     }
 
     void Update()
@@ -81,7 +82,7 @@ public class RacerBehaviour : MonoBehaviour
         if (Mathf.Abs(horizontal) > accDeadZone)
         {
             //turn sideward
-            curTurn = horizontal * turnStrength;
+            curTurn = horizontal;
         }
         else
         {
@@ -113,28 +114,30 @@ public class RacerBehaviour : MonoBehaviour
 
         if (curTurn != 0)
         {
-            //turn the racer
-            rigidBody.AddRelativeTorque(transform.up * curTurn * Time.deltaTime, ForceMode.Acceleration);
+            // Reduce angular drag while turning
+            rigidBody.angularDrag = angularDragOnTurn;
+
+            // Apply centripetal force for turning
+            // Turning radius of racer increases with velocity
+            float radius = baseTurnRadius * rigidBody.velocity.magnitude;
+            float centripetalForce = curTurn * Mathf.Pow(rigidBody.velocity.magnitude, 2.0f) / radius;
+            rigidBody.AddForce(centripetalForce * transform.right, ForceMode.Acceleration);
+
+            rigidBody.AddForce(-rigidBody.velocity * Mathf.Abs(centripetalForce) * speedSlowdownOnTurn, ForceMode.Acceleration);
         }
         else
         {
             //slow down the sideward rotation
-            Vector3 angVel = rigidBody.angularVelocity;
-            angVel.y = angVel.y - angVel.y * slowDownTurn * Time.deltaTime;
-            rigidBody.angularVelocity = angVel;
+            rigidBody.angularDrag = angularDrag;
         }
 
-        // Turning compensation
+        // Correct rotation of racer
         {
+            float forward = isGoingForward ? 1.0f : -1.0f;
             Vector3 forwardVelocity = Vector3.ProjectOnPlane(rigidBody.velocity, transform.up);
-            // interpolate between current velocity direction and current forward transform
-            float forward = isGoingForward ? 1f : -1f;
-            Vector3 newDirection = Vector3.LerpUnclamped(forwardVelocity.normalized, forward * transform.forward.normalized, turnSharpness);
-            // vehicle is slowed down when turning depending on angle
-            float turnAmount = Vector3.Angle(newDirection, forwardVelocity) / 180.0f;
-            float slowDown = Mathf.Max(1.0f / maxSpeedSlowdownOnTurn, (1.0f - turnAmount * speedSlowdownOnTurn));
-            rigidBody.AddForce(-forwardVelocity, ForceMode.VelocityChange);
-            rigidBody.AddForce(newDirection * Mathf.Min(maxSpeed, forwardVelocity.magnitude) * slowDown, ForceMode.VelocityChange);
+            float rotationCorrection = Utility.SignedAngle(forward * transform.forward, forwardVelocity, transform.up) / 180.0f;
+            float strength = rotationCorrectionStrength * forwardVelocity.magnitude;
+            rigidBody.AddRelativeTorque(transform.up * rotationCorrection * strength, ForceMode.Acceleration);
         }
 
         // Add air friction to slow down the vehicle over time.

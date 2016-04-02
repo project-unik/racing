@@ -248,11 +248,11 @@ MonoBehaviour:
   accForward: 1100
   accBackward: 700
   brakeStrength: 50
-  turnStrength: 75
-  slowDownTurn: 10
-  turnSharpness: 1
-  speedSlowdownOnTurn: 2
-  maxSpeedSlowdownOnTurn: 2
+  baseTurnRadius: 1.8
+  angularDrag: 7
+  angularDragOnTurn: 2
+  rotationCorrectionStrength: 3
+  speedSlowdownOnTurn: 0.01
 --- !u!54 &425048815
 Rigidbody:
   m_ObjectHideFlags: 0
