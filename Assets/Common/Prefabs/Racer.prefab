@@ -385,14 +385,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hoverForce: 2
   hoverStability: 0.3
-  hoverSpeed: 2
+  hoverSpeed: 11
   hoverHeight: 2
   tipOverStability: 100
-  airFriction: {x: 5, y: 5, z: 7}
+  airFriction: {x: 0.1, y: 0.1, z: 0.15}
   maxSpeed: 60
-  accForward: 1100
-  accBackward: 700
-  brakeStrength: 50
+  accForward: 50
+  accBackward: 30
+  brakeStrength: 1
   baseTurnRadius: 1.8
   angularDrag: 7
   angularDragOnTurn: 2

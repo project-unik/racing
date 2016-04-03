@@ -32,12 +32,12 @@ public class RacerBehaviour : NetworkBehaviour
     public float hoverHeight = 2f;
     public float tipOverStability = 100.0f;
 
-    public Vector3 airFriction = new Vector3(5f, 5f, 7f);
+    public Vector3 airFriction = new Vector3(0.1f, 0.1f, 0.15f);
 
     public float maxSpeed = 60f;
-    public float accForward = 1100;
-    public float accBackward = 700f;
-    public float brakeStrength = 50f;
+    public float accForward = 50;
+    public float accBackward = 30f;
+    public float brakeStrength = 1f;
 
     public float baseTurnRadius = 1.8f;
     public float angularDrag = 7.0f;
@@ -119,17 +119,17 @@ public class RacerBehaviour : NetworkBehaviour
         // going forward
         if (curThrust >= 0f && rigidBody.velocity.magnitude <= maxSpeed)
         {
-            rigidBody.AddForce(transform.forward * curThrust * Time.deltaTime, ForceMode.Acceleration);
+            rigidBody.AddForce(transform.forward * curThrust, ForceMode.Acceleration);
         }
         // braking
         else if (curThrust < 0f && isGoingForward)
         {
-            rigidBody.AddForce(-transform.forward * brakeStrength * rigidBody.velocity.magnitude * Time.deltaTime, ForceMode.Acceleration);
+            rigidBody.AddForce(-transform.forward * brakeStrength * rigidBody.velocity.magnitude, ForceMode.Acceleration);
         }
         // going backward
         else if (curThrust < 0f && !isGoingForward)
         {
-            rigidBody.AddForce(transform.forward * curThrust * Time.deltaTime, ForceMode.Acceleration);
+            rigidBody.AddForce(transform.forward * curThrust, ForceMode.Acceleration);
         }
 
         if (curTurn != 0)
@@ -164,8 +164,7 @@ public class RacerBehaviour : NetworkBehaviour
         }
 
         // Add air friction to slow down the vehicle over time.
-        Vector3 airForce = airFriction * Time.deltaTime;
-        rigidBody.AddForce(Vector3.Scale(-rigidBody.velocity.normalized, airForce), ForceMode.VelocityChange);
+        rigidBody.AddForce(Vector3.Scale(-rigidBody.velocity.normalized, airFriction), ForceMode.VelocityChange);
 
         //hovering
         for (int i = 0; i < hoverPoints.Length; ++i)
