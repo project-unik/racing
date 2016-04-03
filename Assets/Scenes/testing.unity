@@ -251,7 +251,7 @@ MonoBehaviour:
   baseTurnRadius: 1.8
   angularDrag: 7
   angularDragOnTurn: 2
-  rotationCorrectionStrength: 3
+  rotationCorrectionStrength: 2
   speedSlowdownOnTurn: 0.01
 --- !u!54 &425048815
 Rigidbody:

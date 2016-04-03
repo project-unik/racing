@@ -44,6 +44,7 @@ public class RacerBehaviour : MonoBehaviour
     public float rotationCorrectionStrength = 3.0f;
     [Range(0.0f, 0.1f)]
     public float speedSlowdownOnTurn = 0.01f;
+    public float forwardTorqueStrength = 0.25f;
 
     void Start()
     {
@@ -124,6 +125,9 @@ public class RacerBehaviour : MonoBehaviour
             rigidBody.AddForce(centripetalForce * transform.right, ForceMode.Acceleration);
 
             rigidBody.AddForce(-rigidBody.velocity * Mathf.Abs(centripetalForce) * speedSlowdownOnTurn, ForceMode.Acceleration);
+
+            // Racer leans into the curve
+            rigidBody.AddTorque(-transform.forward * centripetalForce * forwardTorqueStrength, ForceMode.Acceleration);
         }
         else
         {
