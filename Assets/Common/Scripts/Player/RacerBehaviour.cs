@@ -24,6 +24,8 @@ public class RacerBehaviour : NetworkBehaviour
     private float curThrust = 0.0f;
     private float curTurn = 0.0f;
     private Transform[] hoverPoints;
+    [ReadOnly]
+    [SerializeField]
     private bool isGoingForward = true;
 
     public float hoverForce = 2f;
@@ -35,6 +37,7 @@ public class RacerBehaviour : NetworkBehaviour
     public Vector3 airFriction = new Vector3(0.1f, 0.1f, 0.15f);
 
     public float maxSpeed = 60f;
+    public float maxSpeedBackward = 30f;
     public float accForward = 50;
     public float accBackward = 30f;
     public float brakeStrength = 1f;
@@ -127,7 +130,7 @@ public class RacerBehaviour : NetworkBehaviour
             rigidBody.AddForce(-transform.forward * brakeStrength * rigidBody.velocity.magnitude, ForceMode.Acceleration);
         }
         // going backward
-        else if (curThrust < 0f && !isGoingForward)
+        else if (curThrust < 0f && !isGoingForward && rigidBody.velocity.magnitude <= maxSpeedBackward)
         {
             rigidBody.AddForce(transform.forward * curThrust, ForceMode.Acceleration);
         }
