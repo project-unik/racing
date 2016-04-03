@@ -28,7 +28,7 @@ public class RacerBehaviour : NetworkBehaviour
 
     public float hoverForce = 2f;
     public float hoverStability = 0.3f;
-    public float hoverSpeed = 9.0f;
+    public float hoverSpeed = 11.0f;
     public float hoverHeight = 2f;
     public float tipOverStability = 100.0f;
 
@@ -105,9 +105,7 @@ public class RacerBehaviour : NetworkBehaviour
             curTurn = 0;
         }
 
-        // lower than 60 to account for drifting
         isGoingForward = rigidBody.IsMovingForwards();
-        // isGoingForward = Vector3.Angle(transform.forward, rigidBody.velocity) <= 60.0f;
     }
 
     void FixedUpdate()

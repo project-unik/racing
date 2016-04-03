@@ -89,26 +89,26 @@ public class CameraBehaviour : MonoBehaviour
             Assert.IsNotNull(value, "can't set the camera's target to null");
             target = value.transform;
             Assert.IsNotNull(targetRigidbody = value.GetComponent<Rigidbody>(), "new target is missing a Rigidbody component");
+            // set target transform
+            if (target == null)
+            {
+                target = GameObject.FindGameObjectWithTag(Tags.GameObjects.PLAYER).transform;
+            }
+            Assert.IsNotNull(target, "camera is missing target transform");
+            Assert.IsNotNull(targetRigidbody = target.gameObject.GetComponent<Rigidbody>(), "target is missing a Rigidbody component");
+
+            // set relative position
+            Vector3 rel = transform.position - target.position;
+            horizontalDistance = Mathf.Sqrt(rel.x * rel.x + rel.z * rel.z);
+            verticalDistance = rel.y;
+            //temp fix
+            horizontalDistance += 5;
+            verticalDistance -= 1.5f;
         }
     }
     #endregion
 
     #region Unity messages
-    private void Awake()
-    {
-        // set target transform
-        if (target == null)
-        {
-            target = GameObject.FindGameObjectWithTag(Tags.GameObjects.PLAYER).transform;
-        }
-        Assert.IsNotNull(target, "camera is missing target transform");
-        Assert.IsNotNull(targetRigidbody = target.gameObject.GetComponent<Rigidbody>(), "target is missing a Rigidbody component");
-
-        // set relative position
-        Vector3 rel = transform.position - target.position;
-        horizontalDistance = Mathf.Sqrt(rel.x * rel.x + rel.z * rel.z);
-        verticalDistance = rel.y;
-    }
 
     #region Update messages
     private void FixedUpdate()
