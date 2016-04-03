@@ -106,7 +106,8 @@ public class RacerBehaviour : NetworkBehaviour
         }
 
         // lower than 60 to account for drifting
-        isGoingForward = Vector3.Angle(transform.forward, rigidBody.velocity) <= 60.0f;
+        isGoingForward = rigidBody.IsMovingForwards();
+        // isGoingForward = Vector3.Angle(transform.forward, rigidBody.velocity) <= 60.0f;
     }
 
     void FixedUpdate()
