@@ -30,6 +30,13 @@ public class CameraBehaviour : MonoBehaviour
     private float smooth = 20f;
 
     /// <summary>
+    /// absolute speed at which the target will be considered as moving backwards
+    /// </summary>
+    [SerializeField]
+    [Range(0.0f, 50.0f)]
+    private float backwardsThreshold = 10f;
+
+    /// <summary>
     /// whether or not the camera should take the target object's up/down rotation into account when positioning
     /// </summary>
     [SerializeField]
@@ -101,14 +108,13 @@ public class CameraBehaviour : MonoBehaviour
         Vector3 rel = transform.position - target.position;
         horizontalDistance = Mathf.Sqrt(rel.x * rel.x + rel.z * rel.z);
         verticalDistance = rel.y;
-        // horizontalDistance = relativePosition.magnitude - 0.5f; // why -0.5f?
     }
 
     #region Update messages
     private void FixedUpdate()
     {
         // check if the target is moving forward
-        bool movingForward = Vector3.Dot(target.forward, targetRigidbody.velocity) > -1;
+        bool movingForward = targetRigidbody.IsMovingForwards(backwardsThreshold);
 
         // horizontal offset from the target's position
         Vector3 horizontalOffset = target.forward * horizontalDistance;
