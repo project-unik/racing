@@ -107,7 +107,7 @@ public class RacerBehaviour : MonoBehaviour
             rigidBody.AddForce(-transform.forward * brakeStrength * rigidBody.velocity.magnitude * Time.deltaTime, ForceMode.Acceleration);
         }
         // going backward
-        else
+        else if (curThrust < 0f && !isGoingForward)
         {
             rigidBody.AddForce(transform.forward * curThrust * Time.deltaTime, ForceMode.Acceleration);
         }
