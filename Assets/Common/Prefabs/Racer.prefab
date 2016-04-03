@@ -389,10 +389,17 @@ MonoBehaviour:
   hoverHeight: 2
   tipOverStability: 100
   airFriction: {x: 5, y: 5, z: 7}
+  maxSpeed: 60
   accForward: 1100
   accBackward: 700
-  turnStrength: 100
-  slowDownTurn: 12
+  brakeStrength: 50
+  baseTurnRadius: 1.8
+  angularDrag: 7
+  angularDragOnTurn: 2
+  rotationCorrectionStrength: 3
+  speedSlowdownOnTurn: 0.01
+  forwardTorqueStrength: 0.25
+  cameraPrefab: {fileID: 0}
 --- !u!114 &11477766
 MonoBehaviour:
   m_ObjectHideFlags: 1
