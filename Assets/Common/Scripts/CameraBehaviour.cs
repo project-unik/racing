@@ -30,6 +30,13 @@ public class CameraBehaviour : MonoBehaviour
     private float smooth = 20f;
 
     /// <summary>
+    /// absolute speed at which the target will be considered as moving backwards
+    /// </summary>
+    [SerializeField]
+    [Range(0.0f, 50.0f)]
+    private float backwardsThreshold = 10f;
+
+    /// <summary>
     /// whether or not the camera should take the target object's up/down rotation into account when positioning
     /// </summary>
     [SerializeField]
@@ -82,33 +89,32 @@ public class CameraBehaviour : MonoBehaviour
             Assert.IsNotNull(value, "can't set the camera's target to null");
             target = value.transform;
             Assert.IsNotNull(targetRigidbody = value.GetComponent<Rigidbody>(), "new target is missing a Rigidbody component");
+            // set target transform
+            if (target == null)
+            {
+                target = GameObject.FindGameObjectWithTag(Tags.GameObjects.PLAYER).transform;
+            }
+            Assert.IsNotNull(target, "camera is missing target transform");
+            Assert.IsNotNull(targetRigidbody = target.gameObject.GetComponent<Rigidbody>(), "target is missing a Rigidbody component");
+
+            // set relative position
+            Vector3 rel = transform.position - target.position;
+            horizontalDistance = Mathf.Sqrt(rel.x * rel.x + rel.z * rel.z);
+            verticalDistance = rel.y;
+            //temp fix
+            horizontalDistance += 5;
+            verticalDistance -= 1.5f;
         }
     }
     #endregion
 
     #region Unity messages
-    private void Awake()
-    {
-        // set target transform
-        if (target == null)
-        {
-            target = GameObject.FindGameObjectWithTag(Tags.GameObjects.PLAYER).transform;
-        }
-        Assert.IsNotNull(target, "camera is missing target transform");
-        Assert.IsNotNull(targetRigidbody = target.gameObject.GetComponent<Rigidbody>(), "target is missing a Rigidbody component");
-
-        // set relative position
-        Vector3 rel = transform.position - target.position;
-        horizontalDistance = Mathf.Sqrt(rel.x * rel.x + rel.z * rel.z);
-        verticalDistance = rel.y;
-        // horizontalDistance = relativePosition.magnitude - 0.5f; // why -0.5f?
-    }
 
     #region Update messages
     private void FixedUpdate()
     {
         // check if the target is moving forward
-        bool movingForward = Vector3.Dot(target.forward, targetRigidbody.velocity) > -1;
+        bool movingForward = targetRigidbody.IsMovingForward(backwardsThreshold);
 
         // horizontal offset from the target's position
         Vector3 horizontalOffset = target.forward * horizontalDistance;

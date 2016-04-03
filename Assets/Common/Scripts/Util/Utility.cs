@@ -197,4 +197,15 @@ public static class UtilityExtensions
     {
         return Utility.EaseInOut(time, from, to, duration);
     }
+
+    /// <summary>
+    /// Checks if this <see cref="Rigidbody"/> is moving forwards.
+    /// </summary>
+    /// <param name="rigidbody"></param>
+    /// <param name="backwardsThreshold">absolute speed at which the <see cref="Rigidbody"/> will be considered moving backwards, defaults to 1</param>
+    /// <returns><code>true</code> if this <see cref="Rigidbody"/> is moving forwards</returns>
+    public static bool IsMovingForward(this Rigidbody rigidbody, float backwardsThreshold = 1)
+    {
+        return Vector3.Dot(rigidbody.transform.forward, rigidbody.velocity) > -backwardsThreshold;
+    }
 }

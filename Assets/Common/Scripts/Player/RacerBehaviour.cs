@@ -12,31 +12,35 @@
  */
 
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.Assertions;
 using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
-public class RacerBehaviour : MonoBehaviour
+public class RacerBehaviour : NetworkBehaviour
 {
     private Rigidbody rigidBody;
     private float accDeadZone = 0.1f;
     private float curThrust = 0.0f;
     private float curTurn = 0.0f;
     private Transform[] hoverPoints;
+    [ReadOnly]
+    [SerializeField]
     private bool isGoingForward = true;
 
     public float hoverForce = 2f;
     public float hoverStability = 0.3f;
-    public float hoverSpeed = 2.0f;
+    public float hoverSpeed = 11.0f;
     public float hoverHeight = 2f;
     public float tipOverStability = 100.0f;
 
-    public Vector3 airFriction = new Vector3(5f, 5f, 7f);
+    public Vector3 airFriction = new Vector3(0.1f, 0.1f, 0.15f);
 
     public float maxSpeed = 60f;
-    public float accForward = 1100;
-    public float accBackward = 700f;
-    public float brakeStrength = 50f;
+    public float maxSpeedBackward = 30f;
+    public float accForward = 50;
+    public float accBackward = 30f;
+    public float brakeStrength = 1f;
 
     public float baseTurnRadius = 1.8f;
     public float angularDrag = 7.0f;
@@ -45,6 +49,8 @@ public class RacerBehaviour : MonoBehaviour
     [Range(0.0f, 0.1f)]
     public float speedSlowdownOnTurn = 0.01f;
     public float forwardTorqueStrength = 0.25f;
+
+    public GameObject cameraPrefab;
 
     void Start()
     {
@@ -58,8 +64,19 @@ public class RacerBehaviour : MonoBehaviour
         rigidBody.angularDrag = angularDrag;
     }
 
+    public override void OnStartLocalPlayer()
+    {
+        GetComponent<MeshRenderer>().material.color = Color.red;
+        Camera.main.GetComponent<CameraBehaviour>().TrackedObject = gameObject;
+    }
+
     void Update()
     {
+        if(!isLocalPlayer)
+        {
+            return;
+        }
+
         // Handle player input for acceleration.
         float vertical = Input.GetAxis(Tags.Input.VERTICAL);
         if (vertical > accDeadZone)
@@ -91,26 +108,31 @@ public class RacerBehaviour : MonoBehaviour
             curTurn = 0;
         }
 
-        // lower than 60 to account for drifting
-        isGoingForward = Vector3.Angle(transform.forward, rigidBody.velocity) <= 60.0f;
+        isGoingForward = rigidBody.IsMovingForward(backwardsThreshold : 0.0f);
     }
 
     void FixedUpdate()
     {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
+
         // going forward
         if (curThrust >= 0f && rigidBody.velocity.magnitude <= maxSpeed)
         {
-            rigidBody.AddForce(transform.forward * curThrust * Time.deltaTime, ForceMode.Acceleration);
+            rigidBody.AddForce(transform.forward * curThrust, ForceMode.Acceleration);
         }
         // braking
         else if (curThrust < 0f && isGoingForward)
         {
-            rigidBody.AddForce(-transform.forward * brakeStrength * rigidBody.velocity.magnitude * Time.deltaTime, ForceMode.Acceleration);
+            rigidBody.AddForce(-transform.forward * brakeStrength * rigidBody.velocity.magnitude, ForceMode.Acceleration);
         }
         // going backward
-        else if (curThrust < 0f && !isGoingForward)
+        else if (curThrust < 0f && !isGoingForward && rigidBody.velocity.magnitude <= maxSpeedBackward)
         {
-            rigidBody.AddForce(transform.forward * curThrust * Time.deltaTime, ForceMode.Acceleration);
+            rigidBody.AddForce(transform.forward * curThrust, ForceMode.Acceleration);
         }
 
         if (curTurn != 0)
@@ -145,8 +167,7 @@ public class RacerBehaviour : MonoBehaviour
         }
 
         // Add air friction to slow down the vehicle over time.
-        Vector3 airForce = airFriction * Time.deltaTime;
-        rigidBody.AddForce(Vector3.Scale(-rigidBody.velocity.normalized, airForce), ForceMode.VelocityChange);
+        rigidBody.AddForce(Vector3.Scale(-rigidBody.velocity.normalized, airFriction), ForceMode.VelocityChange);
 
         //hovering
         for (int i = 0; i < hoverPoints.Length; ++i)
