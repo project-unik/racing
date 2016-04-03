@@ -105,7 +105,7 @@ public class RacerBehaviour : NetworkBehaviour
             curTurn = 0;
         }
 
-        isGoingForward = rigidBody.IsMovingForwards();
+        isGoingForward = rigidBody.IsMovingForward(backwardsThreshold : 0.0f);
     }
 
     void FixedUpdate()

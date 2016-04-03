@@ -114,7 +114,7 @@ public class CameraBehaviour : MonoBehaviour
     private void FixedUpdate()
     {
         // check if the target is moving forward
-        bool movingForward = targetRigidbody.IsMovingForwards(backwardsThreshold);
+        bool movingForward = targetRigidbody.IsMovingForward(backwardsThreshold);
 
         // horizontal offset from the target's position
         Vector3 horizontalOffset = target.forward * horizontalDistance;
