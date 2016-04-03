@@ -83,20 +83,20 @@ public static class Utility
     }
 
     /// <summary>
-    /// Calulates the angle between two <see cref="Vector3"/>, <paramref name="from"/> and <paramref name="to"/>,
-    /// using <paramref name="normal"/> as a normal.
+    /// Calulates the signed angle the <see cref="Vector3"/> <paramref name="from"/> and <paramref name="to"/>
+    /// in degrees using <paramref name="normal"/> as a normal.
     /// </summary>
     /// <param name="from">First vector</param>
     /// <param name="to">Second vector</param>
     /// <param name="normal">Vector acting as normal</param>
     /// <returns>The signed angle between <paramref name="from"/> and <paramref name="to"/> 
-    /// when projected on the plane described by <paramref name="normal"/>.</returns>
+    /// when projected on the plane described by <paramref name="normal"/>.
+    /// The result is between -179 and 180 degrees.
+    /// </returns>
     public static float SignedAngle(Vector3 from, Vector3 to, Vector3 normal)
     {
-        
         float angle = Vector3.Angle(from, to);
         float sign = Mathf.Sign(Vector3.Dot(normal, Vector3.Cross(from, to)));
-
         return angle * sign;
     }
 }
