@@ -79,28 +79,28 @@ public class CameraBehaviour : MonoBehaviour
     private Rigidbody targetRigidbody;
 
     /// <summary>
-    /// <see cref="GameObject"/> which is tracked by this camera. New targets must not be null and need to have a <see cref="Rigidbody"/> component attached.
+    /// <see cref="GameObject"/> which is tracked by this camera. New targets need to have a <see cref="Rigidbody"/> component attached.
+    /// If <code>null</code> is provided as the new value, the first <see cref="GameObject"/> tagged with <see cref="Tags.GameObjects.PLAYER"/>
+    /// will be used instead.
     /// </summary>
     public GameObject TrackedObject
     {
         get { return target.gameObject; }
         set
         {
-            Assert.IsNotNull(value, "can't set the camera's target to null");
-            target = value.transform;
-            Assert.IsNotNull(targetRigidbody = value.GetComponent<Rigidbody>(), "new target is missing a Rigidbody component");
-            // set target transform
-            if (target == null)
+            if (value == null)
             {
-                target = GameObject.FindGameObjectWithTag(Tags.GameObjects.PLAYER).transform;
+                value = GameObject.FindGameObjectWithTag(Tags.GameObjects.PLAYER);
             }
-            Assert.IsNotNull(target, "camera is missing target transform");
-            Assert.IsNotNull(targetRigidbody = target.gameObject.GetComponent<Rigidbody>(), "target is missing a Rigidbody component");
+            Assert.IsNotNull(value, "camera is missing a target");
+            Assert.IsNotNull(target = value.transform, "target is missing a Transform component");
+            Assert.IsNotNull(targetRigidbody = value.GetComponent<Rigidbody>(), "target is missing a Rigidbody component");
 
             // set relative position
             Vector3 rel = transform.position - target.position;
             horizontalDistance = Mathf.Sqrt(rel.x * rel.x + rel.z * rel.z);
             verticalDistance = rel.y;
+
             //temp fix
             horizontalDistance += 5;
             verticalDistance -= 1.5f;
