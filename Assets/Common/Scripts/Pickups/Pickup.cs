@@ -1,21 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 
 [RequireComponent(typeof(Collider))]
-public abstract class Pickup : MonoBehaviour
+public abstract class Pickup : NetworkBehaviour
 {
-
-    // Use this for initialization
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     /// <summary>
     /// Returns the name of the pickup.
     /// </summary>
@@ -24,6 +13,10 @@ public abstract class Pickup : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        if(!isServer)
+        {
+            return;
+        }
         if (other.tag == Tags.GameObjects.PLAYER && other.gameObject.GetComponent<Inventory>().addPickup(getName()))
         {
             Destroy(gameObject);

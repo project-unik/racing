@@ -14,16 +14,16 @@ public class RacerNetworkBehaviour : NetworkBehaviour
     public override void OnStartLocalPlayer()
     {
         Assert.IsNotNull(cameraPrefab, "Camera prefab for player must not be null.");
-        Debug.logger.Log("Spawning local player...");
+        Debug.Log("Spawning local player...");
         GetComponent<MeshRenderer>().material.color = Color.red;
-        Debug.logger.Log("Spawning camera for local player...");
+        Debug.Log("Spawning camera for local player...");
         cam = (GameObject)Instantiate(cameraPrefab, transform.position, Quaternion.identity);
         cam.GetComponent<CameraBehaviour>().setTrackedObject(gameObject);
     }
 
     void OnDestroy()
     {
-        Debug.logger.Log("Destroying camera for local player...");
+        Debug.Log("Destroying camera for local player...");
         Destroy(cam);
     }
 }
