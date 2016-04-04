@@ -17,7 +17,7 @@ using UnityEngine.Assertions;
 using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
-public class RacerBehaviour : NetworkBehaviour
+public class RacerControls : NetworkBehaviour
 {
     private Rigidbody rigidBody;
     private float accDeadZone = 0.1f;
@@ -27,12 +27,6 @@ public class RacerBehaviour : NetworkBehaviour
     [ReadOnly]
     [SerializeField]
     private bool isGoingForward = true;
-
-    private GameObject cam;
-    /// <summary>
-    /// The camera which should be spawned with the player
-    /// </summary>
-    public GameObject cameraPrefab;
 
     public float hoverForce = 2f;
     public float hoverStability = 0.3f;
@@ -66,21 +60,6 @@ public class RacerBehaviour : NetworkBehaviour
             hoverPoints[i++] = child;
         }
         rigidBody.angularDrag = angularDrag;
-    }
-
-    public override void OnStartLocalPlayer()
-    {
-        Debug.logger.Log("Spawning local player...");
-        GetComponent<MeshRenderer>().material.color = Color.red;
-        Debug.logger.Log("Spawning camera for local player...");
-        cam = (GameObject)Instantiate(cameraPrefab, transform.position, Quaternion.identity);
-        cam.GetComponent<CameraBehaviour>().setTrackedObject(gameObject);
-    }
-
-    void OnDestroy()
-    {
-        Debug.logger.Log("Destroying camera for local player...");
-        Destroy(cam);
     }
 
     void Update()
@@ -130,7 +109,6 @@ public class RacerBehaviour : NetworkBehaviour
         {
             return;
         }
-
 
         // going forward
         if (curThrust >= 0f && rigidBody.velocity.magnitude <= maxSpeed)
