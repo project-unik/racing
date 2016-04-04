@@ -82,11 +82,11 @@ public class CameraBehaviour : MonoBehaviour
     /// <summary>
     /// <see cref="GameObject"/> which is tracked by this camera. New targets must not be null and need to have a <see cref="Rigidbody"/> component attached.
     /// </summary>
-    public void setTrackedObject(GameObject value)
+    public void setTrackedObject(GameObject gameObject)
     {
-        Assert.IsNotNull(value, "can't set the camera's target to null");
-        Assert.IsNotNull(targetRigidbody = value.GetComponent<Rigidbody>(), "new target is missing a Rigidbody component");
-        target = value.transform;
+        Assert.IsNotNull(gameObject, "can't set the camera's target to null");
+        Assert.IsNotNull(targetRigidbody = gameObject.GetComponent<Rigidbody>(), "new target is missing a Rigidbody component");
+        target = gameObject.transform;
         Assert.IsNotNull(target, "camera is missing target transform");
         targetRigidbody = target.gameObject.GetComponent<Rigidbody>();
         Assert.IsNotNull(targetRigidbody, "target is missing a Rigidbody component");
