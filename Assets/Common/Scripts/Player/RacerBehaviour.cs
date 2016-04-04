@@ -70,19 +70,22 @@ public class RacerBehaviour : NetworkBehaviour
 
     public override void OnStartLocalPlayer()
     {
+        Debug.logger.Log("Spawning local player...");
         GetComponent<MeshRenderer>().material.color = Color.red;
+        Debug.logger.Log("Spawning camera for local player...");
         cam = (GameObject)Instantiate(cameraPrefab, transform.position, Quaternion.identity);
         cam.GetComponent<CameraBehaviour>().setTrackedObject(gameObject);
     }
 
     void OnDestroy()
     {
+        Debug.logger.Log("Destroying camera for local player...");
         Destroy(cam);
     }
 
     void Update()
     {
-        if(!isLocalPlayer)
+        if (!isLocalPlayer)
         {
             return;
         }
@@ -118,7 +121,7 @@ public class RacerBehaviour : NetworkBehaviour
             curTurn = 0;
         }
 
-        isGoingForward = rigidBody.IsMovingForward(backwardsThreshold : 0.0f);
+        isGoingForward = rigidBody.IsMovingForward(backwardsThreshold: 0.0f);
     }
 
     void FixedUpdate()
