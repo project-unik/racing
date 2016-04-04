@@ -78,15 +78,14 @@ public class CameraBehaviour : MonoBehaviour
     [SerializeField]
     private Rigidbody targetRigidbody;
 
+    private GameObject trackedObject;
     /// <summary>
     /// <see cref="GameObject"/> which is tracked by this camera. New targets need to have a <see cref="Rigidbody"/> component attached.
     /// If <code>null</code> is provided as the new value, the first <see cref="GameObject"/> tagged with <see cref="Tags.GameObjects.PLAYER"/>
     /// will be used instead.
     /// </summary>
-    public GameObject TrackedObject
+    public void setTrackedObject(GameObject gameObject)
     {
-        get { return target.gameObject; }
-        set
         {
             if (value == null)
             {
@@ -102,10 +101,10 @@ public class CameraBehaviour : MonoBehaviour
             verticalDistance = rel.y;
 
             //temp fix
+        	verticalDistance += 2;
             horizontalDistance += 5;
-            verticalDistance -= 1.5f;
         }
-    }
+
     #endregion
 
     #region Unity messages
@@ -114,7 +113,7 @@ public class CameraBehaviour : MonoBehaviour
     private void FixedUpdate()
     {
         // check if the target is moving forward
-        bool movingForward = targetRigidbody.IsMovingForwards(backwardsThreshold);
+        bool movingForward = targetRigidbody.IsMovingForward(backwardsThreshold);
 
         // horizontal offset from the target's position
         Vector3 horizontalOffset = target.forward * horizontalDistance;
