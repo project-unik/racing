@@ -68,6 +68,7 @@ public class CameraBehaviour : MonoBehaviour
     /// <summary>
     /// reference to the target's transform
     /// </summary>
+    [ReadOnly]
     [SerializeField]
     private Transform target;
 
@@ -78,17 +79,15 @@ public class CameraBehaviour : MonoBehaviour
     [SerializeField]
     private Rigidbody targetRigidbody;
 
-    private GameObject trackedObject;
     /// <summary>
-    /// <see cref="GameObject"/> which is tracked by this camera. New targets must not be null and need to have a <see cref="Rigidbody"/> component attached.
+    /// <see cref="GameObject"/> which will be tracked by this camera. New targets must not be null and need to have a <see cref="Rigidbody"/> component attached.
     /// </summary>
     public void setTrackedObject(GameObject gameObject)
     {
         Assert.IsNotNull(gameObject, "can't set the camera's target to null");
-        Assert.IsNotNull(targetRigidbody = gameObject.GetComponent<Rigidbody>(), "new target is missing a Rigidbody component");
         target = gameObject.transform;
         Assert.IsNotNull(target, "camera is missing target transform");
-        targetRigidbody = target.gameObject.GetComponent<Rigidbody>();
+        targetRigidbody = gameObject.GetComponent<Rigidbody>();
         Assert.IsNotNull(targetRigidbody, "target is missing a Rigidbody component");
 
         // set relative position

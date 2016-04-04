@@ -73,7 +73,6 @@ public class RacerBehaviour : NetworkBehaviour
         GetComponent<MeshRenderer>().material.color = Color.red;
         cam = (GameObject)Instantiate(cameraPrefab, transform.position, Quaternion.identity);
         cam.GetComponent<CameraBehaviour>().setTrackedObject(gameObject);
-        cam.GetComponent<Camera>().enabled = true;
     }
 
     void OnDestroy()
