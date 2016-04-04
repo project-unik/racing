@@ -126,7 +126,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11424818, guid: 099f214f2c887f941964bd8c87c8d202, type: 2}
       propertyPath: m_OnlineScene
-      value: testing
+      value: TestingTrack
       objectReference: {fileID: 0}
     - target: {fileID: 11424818, guid: 099f214f2c887f941964bd8c87c8d202, type: 2}
       propertyPath: m_OfflineScene
@@ -193,7 +193,7 @@ MonoBehaviour:
   m_AutoCreatePlayer: 1
   m_PlayerSpawnMethod: 0
   m_OfflineScene: Menu
-  m_OnlineScene: testing
+  m_OnlineScene: TestingTrack
   m_SpawnPrefabs: []
   m_CustomConfig: 0
   m_MaxConnections: 4
