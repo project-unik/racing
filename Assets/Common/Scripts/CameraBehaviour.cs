@@ -86,25 +86,23 @@ public class CameraBehaviour : MonoBehaviour
     /// </summary>
     public void setTrackedObject(GameObject gameObject)
     {
+        if (gameObject == null)
         {
-            if (value == null)
-            {
-                value = GameObject.FindGameObjectWithTag(Tags.GameObjects.PLAYER);
-            }
-            Assert.IsNotNull(value, "camera is missing a target");
-            Assert.IsNotNull(target = value.transform, "target is missing a Transform component");
-            Assert.IsNotNull(targetRigidbody = value.GetComponent<Rigidbody>(), "target is missing a Rigidbody component");
-
-            // set relative position
-            Vector3 rel = transform.position - target.position;
-            horizontalDistance = Mathf.Sqrt(rel.x * rel.x + rel.z * rel.z);
-            verticalDistance = rel.y;
-
-            //temp fix
-        	verticalDistance += 2;
-            horizontalDistance += 5;
+            gameObject = GameObject.FindGameObjectWithTag(Tags.GameObjects.PLAYER);
         }
+        Assert.IsNotNull(value, "camera is missing a target");
+        Assert.IsNotNull(target = value.transform, "target is missing a Transform component");
+        Assert.IsNotNull(targetRigidbody = value.GetComponent<Rigidbody>(), "target is missing a Rigidbody component");
 
+        // set relative position
+        Vector3 rel = transform.position - target.position;
+        horizontalDistance = Mathf.Sqrt(rel.x * rel.x + rel.z * rel.z);
+        verticalDistance = rel.y;
+
+        //temp fix
+        verticalDistance += 2;
+        horizontalDistance += 5;
+    }
     #endregion
 
     #region Unity messages
