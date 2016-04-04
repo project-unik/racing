@@ -28,6 +28,12 @@ public class RacerBehaviour : NetworkBehaviour
     [SerializeField]
     private bool isGoingForward = true;
 
+    private GameObject cam;
+    /// <summary>
+    /// The camera which should be spawned with the player
+    /// </summary>
+    public GameObject cameraPrefab;
+
     public float hoverForce = 2f;
     public float hoverStability = 0.3f;
     public float hoverSpeed = 11.0f;
@@ -50,8 +56,6 @@ public class RacerBehaviour : NetworkBehaviour
     public float speedSlowdownOnTurn = 0.01f;
     public float forwardTorqueStrength = 0.25f;
 
-    public GameObject cameraPrefab;
-
     void Start()
     {
         rigidBody = this.GetComponent<Rigidbody>();
@@ -67,7 +71,14 @@ public class RacerBehaviour : NetworkBehaviour
     public override void OnStartLocalPlayer()
     {
         GetComponent<MeshRenderer>().material.color = Color.red;
-        Camera.main.GetComponent<CameraBehaviour>().TrackedObject = gameObject;
+        cam = (GameObject)Instantiate(cameraPrefab, transform.position, Quaternion.identity);
+        cam.GetComponent<CameraBehaviour>().setTrackedObject(gameObject);
+        cam.GetComponent<Camera>().enabled = true;
+    }
+
+    void OnDestroy()
+    {
+        Destroy(cam);
     }
 
     void Update()

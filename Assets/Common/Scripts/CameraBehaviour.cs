@@ -78,34 +78,27 @@ public class CameraBehaviour : MonoBehaviour
     [SerializeField]
     private Rigidbody targetRigidbody;
 
+    private GameObject trackedObject;
     /// <summary>
     /// <see cref="GameObject"/> which is tracked by this camera. New targets must not be null and need to have a <see cref="Rigidbody"/> component attached.
     /// </summary>
-    public GameObject TrackedObject
+    public void setTrackedObject(GameObject value)
     {
-        get { return target.gameObject; }
-        set
-        {
-            Assert.IsNotNull(value, "can't set the camera's target to null");
-            target = value.transform;
-            Assert.IsNotNull(targetRigidbody = value.GetComponent<Rigidbody>(), "new target is missing a Rigidbody component");
-            // set target transform
-            if (target == null)
-            {
-                target = GameObject.FindGameObjectWithTag(Tags.GameObjects.PLAYER).transform;
-            }
-            Assert.IsNotNull(target, "camera is missing target transform");
-            Assert.IsNotNull(targetRigidbody = target.gameObject.GetComponent<Rigidbody>(), "target is missing a Rigidbody component");
+        Assert.IsNotNull(value, "can't set the camera's target to null");
+        Assert.IsNotNull(targetRigidbody = value.GetComponent<Rigidbody>(), "new target is missing a Rigidbody component");
+        target = value.transform;
+        Assert.IsNotNull(target, "camera is missing target transform");
+        Assert.IsNotNull(targetRigidbody = target.gameObject.GetComponent<Rigidbody>(), "target is missing a Rigidbody component");
 
-            // set relative position
-            Vector3 rel = transform.position - target.position;
-            horizontalDistance = Mathf.Sqrt(rel.x * rel.x + rel.z * rel.z);
-            verticalDistance = rel.y;
-            //temp fix
-            horizontalDistance += 5;
-            verticalDistance -= 1.5f;
-        }
+        // set relative position
+        Vector3 rel = transform.position - target.position;
+        horizontalDistance = Mathf.Sqrt(rel.x * rel.x + rel.z * rel.z);
+        verticalDistance = rel.y;
+        //temp fix
+        verticalDistance += 2;
+        horizontalDistance += 5;
     }
+
     #endregion
 
     #region Unity messages
