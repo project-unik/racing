@@ -69,7 +69,8 @@ MonoBehaviour:
   m_PlayerSpawnMethod: 0
   m_OfflineScene: Menu
   m_OnlineScene: TestingTrack
-  m_SpawnPrefabs: []
+  m_SpawnPrefabs:
+  - {fileID: 129766, guid: 2dcdff3d0f5fce3409b14c278f722803, type: 2}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
