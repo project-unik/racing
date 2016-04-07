@@ -17,7 +17,7 @@ using UnityEngine.Assertions;
 using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
-public class RacerBehaviour : NetworkBehaviour
+public class RacerControls : NetworkBehaviour
 {
     private Rigidbody rigidBody;
     private float accDeadZone = 0.1f;
@@ -50,8 +50,6 @@ public class RacerBehaviour : NetworkBehaviour
     public float speedSlowdownOnTurn = 0.01f;
     public float forwardTorqueStrength = 0.25f;
 
-    public GameObject cameraPrefab;
-
     void Start()
     {
         rigidBody = this.GetComponent<Rigidbody>();
@@ -64,15 +62,9 @@ public class RacerBehaviour : NetworkBehaviour
         rigidBody.angularDrag = angularDrag;
     }
 
-    public override void OnStartLocalPlayer()
-    {
-        GetComponent<MeshRenderer>().material.color = Color.red;
-        Camera.main.GetComponent<CameraBehaviour>().TrackedObject = gameObject;
-    }
-
     void Update()
     {
-        if(!isLocalPlayer)
+        if (!isLocalPlayer)
         {
             return;
         }
@@ -108,7 +100,7 @@ public class RacerBehaviour : NetworkBehaviour
             curTurn = 0;
         }
 
-        isGoingForward = rigidBody.IsMovingForward(backwardsThreshold : 0.0f);
+        isGoingForward = rigidBody.IsMovingForward(backwardsThreshold: 0.0f);
     }
 
     void FixedUpdate()
@@ -117,7 +109,6 @@ public class RacerBehaviour : NetworkBehaviour
         {
             return;
         }
-
 
         // going forward
         if (curThrust >= 0f && rigidBody.velocity.magnitude <= maxSpeed)
