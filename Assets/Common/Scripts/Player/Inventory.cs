@@ -57,7 +57,7 @@ public class Inventory : NetworkBehaviour
     /// </summary>
     /// <param name="name"></param>
     /// <returns>True if the pickup was added to the inventory, false otherwise .</returns>
-    public bool addPickup(string pickupName)
+    public bool AddPickup(string pickupName)
     {
         if (inventory.Count < maxPickups)
         {

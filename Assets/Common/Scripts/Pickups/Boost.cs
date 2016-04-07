@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Boost : Pickup
 {
-    protected override string getName()
+    protected override string GetName()
     {
         return "Boost";
     }
