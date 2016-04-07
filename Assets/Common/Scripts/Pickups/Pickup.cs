@@ -6,10 +6,10 @@ using UnityEngine.Networking;
 public abstract class Pickup : NetworkBehaviour
 {
     /// <summary>
-    /// Returns the name of the pickup.
+    /// Performs the action of this pickup. It is not allowed to change the state of the pickup.
     /// </summary>
-    /// <returns></returns>
-    abstract protected string GetName();
+    /// <param name="player"></param>
+    abstract public void Use(GameObject player);
 
     void OnTriggerEnter(Collider other)
     {
@@ -17,7 +17,7 @@ public abstract class Pickup : NetworkBehaviour
         {
             return;
         }
-        if (other.tag == Tags.GameObjects.PLAYER && other.gameObject.GetComponent<Inventory>().AddPickup(GetName()))
+        if (other.tag == Tags.GameObjects.PLAYER && other.gameObject.GetComponent<Inventory>().AddPickup(this.GetType().Name))
         {
             Destroy(gameObject);
         }

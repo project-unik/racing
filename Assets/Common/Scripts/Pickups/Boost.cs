@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class Boost : Pickup
 {
-    protected override string GetName()
+    public override void Use(GameObject player)
     {
-        return "Boost";
+        player.GetComponent<Rigidbody>().AddForce(player.transform.forward*5000, ForceMode.Acceleration);
     }
 }
