@@ -68,6 +68,7 @@ public class CameraBehaviour : MonoBehaviour
     /// <summary>
     /// reference to the target's transform
     /// </summary>
+    [ReadOnly]
     [SerializeField]
     private Transform target;
 
@@ -78,7 +79,6 @@ public class CameraBehaviour : MonoBehaviour
     [SerializeField]
     private Rigidbody targetRigidbody;
 
-    private GameObject trackedObject;
     /// <summary>
     /// <see cref="GameObject"/> which is tracked by this camera. New targets need to have a <see cref="Rigidbody"/> component attached.
     /// If <code>null</code> is provided as the new value, the first <see cref="GameObject"/> tagged with <see cref="Tags.GameObjects.PLAYER"/>

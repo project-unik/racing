@@ -1,30 +1,23 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 
 [RequireComponent(typeof(Collider))]
-public abstract class Pickup : MonoBehaviour
+public abstract class Pickup : NetworkBehaviour
 {
-
-    // Use this for initialization
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     /// <summary>
-    /// Returns the name of the pickup.
+    /// Performs the action of this pickup. It is not allowed to change the state of the pickup.
     /// </summary>
-    /// <returns></returns>
-    abstract protected string getName();
+    /// <param name="player"></param>
+    abstract public void Use(GameObject player);
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == Tags.GameObjects.PLAYER && other.gameObject.GetComponent<Inventory>().addPickup(getName()))
+        if(!isServer)
+        {
+            return;
+        }
+        if (other.tag == Tags.GameObjects.PLAYER && other.gameObject.GetComponent<Inventory>().AddPickup(this.GetType().Name))
         {
             Destroy(gameObject);
         }

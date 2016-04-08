@@ -17,7 +17,7 @@ using UnityEngine.Assertions;
 using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
-public class RacerBehaviour : NetworkBehaviour
+public class RacerControls : NetworkBehaviour
 {
     private Rigidbody rigidBody;
     private float accDeadZone = 0.1f;
@@ -27,12 +27,6 @@ public class RacerBehaviour : NetworkBehaviour
     [ReadOnly]
     [SerializeField]
     private bool isGoingForward = true;
-
-    private GameObject cam;
-    /// <summary>
-    /// The camera which should be spawned with the player
-    /// </summary>
-    public GameObject cameraPrefab;
 
     public float hoverForce = 2f;
     public float hoverStability = 0.3f;
@@ -68,22 +62,9 @@ public class RacerBehaviour : NetworkBehaviour
         rigidBody.angularDrag = angularDrag;
     }
 
-    public override void OnStartLocalPlayer()
-    {
-        GetComponent<MeshRenderer>().material.color = Color.red;
-        cam = (GameObject)Instantiate(cameraPrefab, transform.position, Quaternion.identity);
-        cam.GetComponent<CameraBehaviour>().setTrackedObject(gameObject);
-        cam.GetComponent<Camera>().enabled = true;
-    }
-
-    void OnDestroy()
-    {
-        Destroy(cam);
-    }
-
     void Update()
     {
-        if(!isLocalPlayer)
+        if (!isLocalPlayer)
         {
             return;
         }
@@ -119,7 +100,7 @@ public class RacerBehaviour : NetworkBehaviour
             curTurn = 0;
         }
 
-        isGoingForward = rigidBody.IsMovingForward(backwardsThreshold : 0.0f);
+        isGoingForward = rigidBody.IsMovingForward(backwardsThreshold: 0.0f);
     }
 
     void FixedUpdate()
@@ -128,7 +109,6 @@ public class RacerBehaviour : NetworkBehaviour
         {
             return;
         }
-
 
         // going forward
         if (curThrust >= 0f && rigidBody.velocity.magnitude <= maxSpeed)

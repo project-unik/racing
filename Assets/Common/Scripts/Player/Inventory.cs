@@ -1,28 +1,56 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
+using System.Reflection;
 
-public class Inventory : MonoBehaviour
+public class Inventory : NetworkBehaviour
 {
     private int maxPickups = 2;
-    private Queue inventory;
+    private SyncListString inventory = new SyncListString();
 
-    // Use this for initialization
+    private void InventoryChanged(SyncListString.Operation op, int itemIndex)
+    {
+        Debug.Log("Inventory changed: " + op);
+    }
+
     void Start()
     {
-        inventory = new Queue(maxPickups);
+        inventory.Callback = InventoryChanged;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(inventory.Count>0 && Input.GetButtonUp(Tags.Input.FIRE))
+        if (!isLocalPlayer)
         {
-            Debug.logger.Log("Using a " + inventory.Dequeue());
+            return;
+        }
+        if (Input.GetButtonUp(Tags.Input.FIRE))
+        {
+            CmdUsePickup();
+        }
+    }
+
+    [Command]
+    void CmdUsePickup()
+    {
+        if (inventory.Count > 0)
+        {
+            string pickup = inventory[0];
+            inventory.RemoveAt(0);
+            //temp. implementation
+            System.Type type = System.Type.GetType(pickup);
+            MethodInfo useMethod = type.GetMethod("Use");
+            useMethod.Invoke(System.Runtime.Serialization.FormatterServices.GetUninitializedObject(type), new Object[] { gameObject });
         }
     }
 
     void OnGUI()
     {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
         int i = 1;
         foreach (string pickup in inventory)
         {
@@ -35,12 +63,11 @@ public class Inventory : MonoBehaviour
     /// </summary>
     /// <param name="name"></param>
     /// <returns>True if the pickup was added to the inventory, false otherwise .</returns>
-    public bool addPickup(string pickupName)
+    public bool AddPickup(string pickupName)
     {
         if (inventory.Count < maxPickups)
         {
-            Debug.logger.Log("Picked up a " + pickupName);
-            inventory.Enqueue(pickupName);
+            inventory.Add(pickupName);
             return true;
         }
         return false;
