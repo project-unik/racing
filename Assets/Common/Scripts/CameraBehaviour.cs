@@ -90,9 +90,9 @@ public class CameraBehaviour : MonoBehaviour
         {
             gameObject = GameObject.FindGameObjectWithTag(Tags.GameObjects.PLAYER);
         }
-        Assert.IsNotNull(value, "camera is missing a target");
-        Assert.IsNotNull(target = value.transform, "target is missing a Transform component");
-        Assert.IsNotNull(targetRigidbody = value.GetComponent<Rigidbody>(), "target is missing a Rigidbody component");
+        Assert.IsNotNull(gameObject, "camera is missing a target");
+        Assert.IsNotNull(target = gameObject.transform, "target is missing a Transform component");
+        Assert.IsNotNull(targetRigidbody = gameObject.GetComponent<Rigidbody>(), "target is missing a Rigidbody component");
 
         // set relative position
         Vector3 rel = transform.position - target.position;
