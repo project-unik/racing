@@ -201,7 +201,7 @@ public class RacerControls : NetworkBehaviour
         }
     }
 
-    void handleFlying()
+    private void handleFlying()
     {
         RaycastHit hit;
         //cast ray down
@@ -215,12 +215,10 @@ public class RacerControls : NetworkBehaviour
             //curThrust doesn't change
         }
         //disable thrust if too far away from ground
-        else if(distanceToGround > maxThrustHeightMulti * hoverHeight)
+        else if (distanceToGround > maxThrustHeightMulti * hoverHeight)
         {
             curThrust = 0;
         }
-
-        Debug.Log("Velocity: " + (int)(rigidBody.velocity.magnitude * 3.6f) + "km/h, Height: " + distanceToGround + "m");
-
+        //Debug.Log("Velocity: " + (int)(rigidBody.velocity.magnitude * 3.6f) + "km/h, Height: " + distanceToGround + "m");
     }
 }
