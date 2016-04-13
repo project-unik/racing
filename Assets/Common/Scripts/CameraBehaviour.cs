@@ -80,13 +80,19 @@ public class CameraBehaviour : MonoBehaviour
     private Rigidbody targetRigidbody;
 
     /// <summary>
-    /// <see cref="GameObject"/> which will be tracked by this camera. New targets must not be null and need to have a <see cref="Rigidbody"/> component attached.
+    /// <see cref="GameObject"/> which is tracked by this camera. New targets need to have a <see cref="Rigidbody"/> component attached.
+    /// If <code>null</code> is provided as the new value, the first <see cref="GameObject"/> tagged with <see cref="Tags.GameObjects.PLAYER"/>
+    /// will be used instead.
     /// </summary>
     public void setTrackedObject(GameObject gameObject)
     {
-        Assert.IsNotNull(gameObject, "can't set the camera's target to null");
+        if (gameObject == null)
+        {
+            gameObject = GameObject.FindGameObjectWithTag(Tags.GameObjects.PLAYER);
+        }
+        Assert.IsNotNull(gameObject, "camera is missing a target");
         target = gameObject.transform;
-        Assert.IsNotNull(target, "camera is missing target transform");
+        Assert.IsNotNull(target, "target is missing a Transform component");
         targetRigidbody = gameObject.GetComponent<Rigidbody>();
         Assert.IsNotNull(targetRigidbody, "target is missing a Rigidbody component");
 
@@ -94,11 +100,11 @@ public class CameraBehaviour : MonoBehaviour
         Vector3 rel = transform.position - target.position;
         horizontalDistance = Mathf.Sqrt(rel.x * rel.x + rel.z * rel.z);
         verticalDistance = rel.y;
+
         //temp fix
         verticalDistance += 2;
         horizontalDistance += 5;
     }
-
     #endregion
 
     #region Unity messages

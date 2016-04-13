@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
+using System.Reflection;
 
 public class Inventory : NetworkBehaviour
 {
@@ -24,7 +25,7 @@ public class Inventory : NetworkBehaviour
         {
             return;
         }
-        if(Input.GetButtonUp(Tags.Input.FIRE))
+        if (Input.GetButtonUp(Tags.Input.FIRE))
         {
             CmdUsePickup();
         }
@@ -33,9 +34,14 @@ public class Inventory : NetworkBehaviour
     [Command]
     void CmdUsePickup()
     {
-        if(inventory.Count>0)
+        if (inventory.Count > 0)
         {
+            string pickup = inventory[0];
             inventory.RemoveAt(0);
+            //temp. implementation
+            System.Type type = System.Type.GetType(pickup);
+            MethodInfo useMethod = type.GetMethod("Use");
+            useMethod.Invoke(System.Runtime.Serialization.FormatterServices.GetUninitializedObject(type), new Object[] { gameObject });
         }
     }
 
@@ -57,7 +63,7 @@ public class Inventory : NetworkBehaviour
     /// </summary>
     /// <param name="name"></param>
     /// <returns>True if the pickup was added to the inventory, false otherwise .</returns>
-    public bool addPickup(string pickupName)
+    public bool AddPickup(string pickupName)
     {
         if (inventory.Count < maxPickups)
         {
