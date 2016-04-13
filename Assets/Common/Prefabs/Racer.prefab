@@ -402,6 +402,7 @@ MonoBehaviour:
   speedSlowdownOnTurn: 0.01
   forwardTorqueStrength: 0.25
   maxThrustHeightMulti: 4
+  allowBrakingInAir: 1
 --- !u!114 &11477766
 MonoBehaviour:
   m_ObjectHideFlags: 1

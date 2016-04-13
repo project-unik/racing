@@ -51,7 +51,9 @@ public class RacerControls : NetworkBehaviour
     public float forwardTorqueStrength = 0.25f;
 
     //maximum height racer may be above ground and still recieve forward thrust, as a multiplier of hoverHeight
-    public float maxThrustHeightMulti = 4; 
+    public float maxThrustHeightMulti = 4;
+
+    public bool allowBrakingInAir;
 
     void Start()
     {
@@ -79,8 +81,7 @@ public class RacerControls : NetworkBehaviour
             //set thrust forward
             curThrust = vertical * accForward;
         }
-        // do not apply backwards thrust when in air
-        else if (vertical < -accDeadZone && Physics.Raycast(transform.position, -transform.up, 1.5f * hoverHeight))
+        else if (vertical < -accDeadZone)
         {
             //set thrust backward
             curThrust = vertical * accBackward;
@@ -208,8 +209,13 @@ public class RacerControls : NetworkBehaviour
         //get distance to ground
         float distanceToGround = hit.distance;
 
+        //optionally allow negative thrust in air while moving forward -> braking in air
+        if (allowBrakingInAir && curThrust < 0 && isGoingForward)
+        {
+            //curThrust doesn't change
+        }
         //disable thrust if too far away from ground
-        if(distanceToGround > maxThrustHeightMulti * hoverHeight)
+        else if(distanceToGround > maxThrustHeightMulti * hoverHeight)
         {
             curThrust = 0;
         }
