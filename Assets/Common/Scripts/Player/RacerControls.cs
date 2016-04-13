@@ -113,6 +113,9 @@ public class RacerControls : NetworkBehaviour
             return;
         }
 
+        // flying
+        handleFlying();
+
         // going forward
         if (curThrust >= 0f && rigidBody.velocity.magnitude <= maxSpeed)
         {
