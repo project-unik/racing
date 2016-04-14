@@ -1,14 +1,9 @@
 ﻿/*!
  * @file Assets/Behaviours/CameraBehaviour.cs
  * @created 2016/02/28
- * @lastmodified 2016/03/30
+ * @lastmodified 2016/04/14
  * @brief Implements the camera behaviour following the player.
  *   Must be placed on the target camera object.
- *
- * Todo
- * ====
- *
- * - Make camera follow the Z-direction of the target object
  */
 
 using UnityEngine;
@@ -35,12 +30,6 @@ public class CameraBehaviour : MonoBehaviour
     [SerializeField]
     [Range(0.0f, 50.0f)]
     private float backwardsThreshold = 10f;
-
-    /// <summary>
-    /// whether or not the camera should take the target object's up/down rotation into account when positioning
-    /// </summary>
-    [SerializeField]
-    private bool honourUpDownRotation = true;
 
     /// <summary>
     /// position which the camera is trying to reach
@@ -129,35 +118,17 @@ public class CameraBehaviour : MonoBehaviour
         Vector3 horizontalOffset = target.forward * horizontalDistance;
         if (movingForward)
         {
-            horizontalOffset.x *= -1f;
-            horizontalOffset.y *= -1f;
-            horizontalOffset.z *= -1f;
+            horizontalOffset *= -1;
         }
 
         // vertical offset from the target's position
-        Vector3 verticalOffset;
-        if (honourUpDownRotation)
-        {
-            verticalOffset = target.up * verticalDistance;
-        }
-        else
-        {
-            verticalOffset = Vector3.up * verticalDistance;
-        }
+        Vector3 verticalOffset = target.up * verticalDistance;
 
         // relative position of the camera from the target object
         Vector3 standard = target.position + horizontalOffset + verticalOffset;
 
         // position directly above the target object at the same distance as standard
-        Vector3 above = target.position;
-        if (honourUpDownRotation)
-        {
-            above += target.up * verticalDistance;
-        }
-        else
-        {
-            above += Vector3.up * verticalDistance;
-        }
+        Vector3 above = target.position + target.up * verticalDistance;
 
         // points that are used to check if the camera can see the target object
         Vector3[] checkPoints = new Vector3[5];
