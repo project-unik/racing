@@ -140,7 +140,7 @@ Transform:
   m_GameObject: {fileID: 129796}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 143.7897, y: 8.059999, z: 194.48335}
-  m_LocalScale: {x: 2.06, y: 0.5992065, z: 3.1479447}
+  m_LocalScale: {x: 2, y: 1, z: 4}
   m_Children:
   - {fileID: 427166}
   - {fileID: 474864}
@@ -389,7 +389,7 @@ MonoBehaviour:
   hoverSpeed: 11
   hoverHeight: 2
   tipOverStability: 100
-  airFriction: {x: 0.1, y: 0.1, z: 0.15}
+  airFriction: {x: 0.0001, y: 0.0001, z: 0.00015}
   maxSpeed: 60
   maxSpeedBackward: 30
   accForward: 30
@@ -401,6 +401,8 @@ MonoBehaviour:
   rotationCorrectionStrength: 3
   speedSlowdownOnTurn: 0.01
   forwardTorqueStrength: 0.25
+  maxThrustHeightMulti: 4
+  allowBrakingInAir: 0
 --- !u!114 &11477766
 MonoBehaviour:
   m_ObjectHideFlags: 1
