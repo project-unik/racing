@@ -10,7 +10,7 @@ public class Inventory : NetworkBehaviour
 
     private void InventoryChanged(SyncListString.Operation op, int itemIndex)
     {
-        Debug.Log("Inventory changed: " + op);
+        Debug.Log("Inventory changed, Operation " + op + " for itemIndex " + itemIndex);
     }
 
     void Start()
