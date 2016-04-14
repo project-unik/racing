@@ -64,6 +64,14 @@ public class CameraBehaviour : MonoBehaviour
     private float verticalDistance;
     #endregion
 
+    #region debug settings
+    /// <summary>
+    /// whether or not the update method should draw debugging lines or not
+    /// </summary>
+    [SerializeField]
+    private bool doDebugDraw = false;
+    #endregion
+
     #region targets
     /// <summary>
     /// reference to the target's transform
@@ -78,9 +86,10 @@ public class CameraBehaviour : MonoBehaviour
     [ReadOnly]
     [SerializeField]
     private Rigidbody targetRigidbody;
+    #endregion
 
     /// <summary>
-    /// <see cref="GameObject"/> which is tracked by this camera. New targets need to have a <see cref="Rigidbody"/> component attached.
+    /// Sets the <see cref="GameObject"/> which is tracked by this camera. New targets need to have a <see cref="Rigidbody"/> component attached.
     /// If <code>null</code> is provided as the new value, the first <see cref="GameObject"/> tagged with <see cref="Tags.GameObjects.PLAYER"/>
     /// will be used instead.
     /// </summary>
@@ -103,13 +112,14 @@ public class CameraBehaviour : MonoBehaviour
         verticalDistance += 2;
         horizontalDistance += 5;
     }
-    #endregion
 
     #region Unity messages
-
     #region Update messages
     private void FixedUpdate()
     {
+        // cancel update if no target is set; prevents UnassignedReferenceExceptions from occurring
+        if (target == null) return;
+
         // check if the target is moving forward
         bool movingForward = targetRigidbody.IsMovingForward(backwardsThreshold);
 
@@ -118,11 +128,8 @@ public class CameraBehaviour : MonoBehaviour
         if (movingForward)
         {
             horizontalOffset.x *= -1f;
+            horizontalOffset.y *= -1f;
             horizontalOffset.z *= -1f;
-        }
-        if (!honourUpDownRotation)
-        {
-            horizontalOffset.y = 0;
         }
 
         // vertical offset from the target's position
@@ -140,7 +147,15 @@ public class CameraBehaviour : MonoBehaviour
         Vector3 standard = target.position + horizontalOffset + verticalOffset;
 
         // position directly above the target object at the same distance as standard
-        Vector3 above = target.position + Vector3.up * horizontalDistance;
+        Vector3 above = target.position;
+        if (honourUpDownRotation)
+        {
+            above += target.up * verticalDistance;
+        }
+        else
+        {
+            above += Vector3.up * verticalDistance;
+        }
 
         // points that are used to check if the camera can see the target object
         Vector3[] checkPoints = new Vector3[5];
@@ -165,6 +180,22 @@ public class CameraBehaviour : MonoBehaviour
 
         // look at the target
         LookAtTarget();
+
+        if (doDebugDraw)
+        {
+            // local axes (front = blue, right = red, up = green)
+            Debug.DrawLine(target.position, target.position + target.forward * 3, Color.blue);
+            Debug.DrawLine(target.position, target.position + target.right * 3, Color.red);
+            Debug.DrawLine(target.position, target.position + target.up * 3, Color.green);
+
+            // axis on which the camera is trying to position itself (magenta)
+            Debug.DrawLine(standard, above, Color.magenta);
+
+            // vectors which resulted in the camera's axis (cyan, yellow)
+            Vector3 vec = target.position + horizontalOffset;
+            Debug.DrawLine(target.position, vec, Color.cyan);
+            Debug.DrawLine(vec, vec + verticalOffset, Color.yellow);
+        }
     }
     #endregion
     #endregion
