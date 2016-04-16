@@ -34,7 +34,7 @@ public class RacerControls : NetworkBehaviour
     public float hoverHeight = 2f;
     public float tipOverStability = 100.0f;
 
-    public Vector3 airFriction = new Vector3(0.1f, 0.1f, 0.15f);
+    public Vector3 airFriction = new Vector3(0.00001f, 0.000001f, 0.00001f);
 
     public float maxSpeed = 60f;
     public float maxSpeedBackward = 30f;
@@ -123,12 +123,16 @@ public class RacerControls : NetworkBehaviour
             rigidBody.AddForce(transform.forward * curThrust, ForceMode.Acceleration);
         }
         // braking
-        else if (curThrust < 0f && isGoingForward)
+        //else 
+        if (curThrust < 0f && isGoingForward)
         {
             rigidBody.AddForce(-transform.forward * brakeStrength * rigidBody.velocity.magnitude, ForceMode.Acceleration);
         }
         // going backward
-        else if (curThrust < 0f && !isGoingForward && rigidBody.velocity.magnitude <= maxSpeedBackward)
+        //else
+        if (curThrust < 0f && 
+            //!isGoingForward && 
+            rigidBody.velocity.magnitude <= maxSpeedBackward)
         {
             rigidBody.AddForce(transform.forward * curThrust, ForceMode.Acceleration);
         }

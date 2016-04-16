@@ -389,12 +389,12 @@ MonoBehaviour:
   hoverSpeed: 11
   hoverHeight: 2
   tipOverStability: 100
-  airFriction: {x: 0.0001, y: 0.0001, z: 0.00015}
+  airFriction: {x: 0.00001, y: 0.00001, z: 0.00001}
   maxSpeed: 60
   maxSpeedBackward: 30
   accForward: 30
   accBackward: 15
-  brakeStrength: 1
+  brakeStrength: 0.2
   baseTurnRadius: 1.8
   angularDrag: 7
   angularDragOnTurn: 2
