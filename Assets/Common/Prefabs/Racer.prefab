@@ -385,7 +385,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isGoingForward: 1
   hoverForce: 2
-  hoverStability: 0.35
+  hoverStability: 2.5
   hoverSpeed: 11
   hoverHeight: 2
   tipOverStability: 100
