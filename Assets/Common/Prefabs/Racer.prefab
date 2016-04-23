@@ -395,7 +395,7 @@ MonoBehaviour:
   accForward: 30
   accBackward: 15
   brakeStrength: 0.2
-  baseTurnRadius: 1.8
+  baseTurnRadius: 1.2
   angularDrag: 7
   angularDragOnTurn: 2
   rotationCorrectionStrength: 3
