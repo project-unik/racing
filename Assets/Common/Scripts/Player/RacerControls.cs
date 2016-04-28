@@ -23,15 +23,25 @@ public class RacerControls : NetworkBehaviour
     private float accDeadZone = 0.1f;
     private float curThrust = 0.0f;
     private float curTurn = 0.0f;
+
+    //regulation of hovering
+    private float oldHeight = 0;
+
     private Transform[] hoverPoints;
     [ReadOnly]
     [SerializeField]
     private bool isGoingForward = true;
 
-    public float hoverForce = 2f;
+    #region editorVariables
     public float hoverStability = 0.3f;
     public float hoverSpeed = 11.0f;
-    public float hoverHeight = 2f;
+    [Tooltip("Distance to the floor the racer should maintain")]
+    public float hoverHeight = 1.5f;
+    [Tooltip("Propotional factor of the hovering regulation")]
+    public float hoverPFactor = 4.2f;
+    [Tooltip("Differaton factor of the hovering regulation")]
+    public float hoverDFactor = 8f;
+    [Tooltip("The stability of the vehicle against overturning")]
     public float tipOverStability = 100.0f;
 
     public Vector3 airFriction = new Vector3(0.00001f, 0.000001f, 0.00001f);
@@ -51,9 +61,11 @@ public class RacerControls : NetworkBehaviour
     public float forwardTorqueStrength = 0.25f;
 
     //maximum height racer may be above ground and still recieve forward thrust, as a multiplier of hoverHeight
+    [Tooltip("Factor for hover height where thrust is still applied")]
     public float maxThrustHeightMulti = 4;
 
     public bool allowBrakingInAir;
+    #endregion
 
     void Start()
     {
@@ -130,7 +142,7 @@ public class RacerControls : NetworkBehaviour
         }
         // going backward
         //else
-        if (curThrust < 0f && 
+        if (curThrust < 0f &&
             //!isGoingForward && 
             rigidBody.velocity.magnitude <= maxSpeedBackward)
         {
@@ -173,17 +185,29 @@ public class RacerControls : NetworkBehaviour
         Vector3 airForce = airFriction * rigidBody.velocity.sqrMagnitude;
         rigidBody.AddForce(Vector3.Scale(-rigidBody.velocity.normalized, airForce), ForceMode.VelocityChange);
 
-        //hovering
+        Hover();
+    }
+
+    private void Hover()
+    {
+        float heightDiff = transform.position.y - oldHeight;
+        oldHeight = transform.position.y;
+
+        //for each hover point perform the stabilization
         for (int i = 0; i < hoverPoints.Length; ++i)
         {
             Transform hoverPoint = hoverPoints[i];
             RaycastHit hit;
-            Vector3 upVector;
+            Vector3 upVector = hoverPoint.up;
             if (Physics.Raycast(hoverPoint.position, -hoverPoint.up, out hit, hoverHeight))
             {
-
-                // Add force to make the vehicle hover over the ground.
-                rigidBody.AddForceAtPosition(-hoverPoint.up * hoverForce * Mathf.Pow(hit.distance - hoverHeight, 3.0f), hoverPoint.position, ForceMode.Acceleration);
+                //Add force to make the vehicle hover over the ground.
+                //first the proportional factor
+                float factor = hoverPFactor * (hoverHeight - hit.distance);
+                //then the differation factor
+                factor += -hoverDFactor * heightDiff;
+                //add the force
+                rigidBody.AddForceAtPosition(hoverPoint.up * factor, hoverPoint.position, ForceMode.Acceleration);
                 upVector = hit.normal;
             }
             else
@@ -192,7 +216,6 @@ public class RacerControls : NetworkBehaviour
                 {
                     rigidBody.AddForceAtPosition(hoverPoint.up * tipOverStability, hoverPoint.position);
                 }
-                upVector = hoverPoint.up;
             }
             // Add force to stabilize the vehicle in the air.
             // http://answers.unity3d.com/questions/10425/how-to-stabilize-angular-motion-alignment-of-hover.html

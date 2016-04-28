@@ -103,7 +103,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 117364}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.4, y: -0.15, z: -0.4}
+  m_LocalPosition: {x: 0.385, y: -0.487, z: -0.47}
   m_LocalScale: {x: 0.22, y: 0.0909133, z: 0.0909133}
   m_Children: []
   m_Father: {fileID: 464524}
@@ -115,7 +115,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 113394}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.4, y: -0.15, z: -0.4}
+  m_LocalPosition: {x: -0.385, y: -0.487, z: -0.47}
   m_LocalScale: {x: 0.22, y: 0.09091331, z: 0.09091331}
   m_Children: []
   m_Father: {fileID: 464524}
@@ -127,7 +127,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100686}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.4, y: -0.15, z: 0.4}
+  m_LocalPosition: {x: 0.385, y: -0.487, z: 0.47}
   m_LocalScale: {x: 0.22, y: 0.090913296, z: 0.090913296}
   m_Children: []
   m_Father: {fileID: 464524}
@@ -139,7 +139,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 129796}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 143.7897, y: 8.059999, z: 194.48335}
+  m_LocalPosition: {x: -1.7104034, y: 0.763, z: 131.03983}
   m_LocalScale: {x: 2, y: 1, z: 4}
   m_Children:
   - {fileID: 427166}
@@ -155,7 +155,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 140212}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.4, y: -0.15, z: 0.4}
+  m_LocalPosition: {x: -0.385, y: -0.487, z: 0.47}
   m_LocalScale: {x: 0.22, y: 0.0909133, z: 0.0909133}
   m_Children: []
   m_Father: {fileID: 464524}
@@ -384,17 +384,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isGoingForward: 1
-  hoverForce: 1
-  hoverStability: 1.5
+  hoverStability: 0.3
   hoverSpeed: 11
-  hoverHeight: 2.5
+  hoverHeight: 1.5
+  hoverPFactor: 4.2
+  hoverDFactor: 8
   tipOverStability: 100
-  airFriction: {x: 0.00001, y: 0.00001, z: 0.00001}
+  airFriction: {x: 0.00001, y: 0.000001, z: 0.00001}
   maxSpeed: 60
   maxSpeedBackward: 30
-  accForward: 30
-  accBackward: 15
-  brakeStrength: 0.2
+  accForward: 50
+  accBackward: 30
+  brakeStrength: 1
   baseTurnRadius: 1.8
   angularDrag: 7
   angularDragOnTurn: 2
