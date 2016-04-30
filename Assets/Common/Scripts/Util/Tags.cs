@@ -13,5 +13,6 @@ public static class Tags
     public static class GameObjects
     {
         public const string PLAYER = "Player";
+        public const string PLAYER_HOVER = "PlayerHover";
     }
 }

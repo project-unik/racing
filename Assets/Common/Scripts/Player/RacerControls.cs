@@ -74,7 +74,10 @@ public class RacerControls : NetworkBehaviour
         hoverPoints = new Transform[4];
         foreach (Transform child in transform)
         {
-            hoverPoints[i++] = child;
+            if (child.gameObject.tag == Tags.GameObjects.PLAYER_HOVER)
+            {
+                hoverPoints[i++] = child;
+            }
         }
         rigidBody.angularDrag = angularDrag;
     }
