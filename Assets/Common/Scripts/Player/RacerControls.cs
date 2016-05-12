@@ -182,8 +182,11 @@ public class RacerControls : NetworkBehaviour
 
         // Add air friction to slow down the vehicle over time.
         //airForce is proportional to Veolicity Squared
-        Vector3 airForce = airFriction * rigidBody.velocity.sqrMagnitude;
+        Vector3 airForce = airFriction * rigidBody.velocity.magnitude;
         rigidBody.AddForce(Vector3.Scale(-rigidBody.velocity.normalized, airForce), ForceMode.VelocityChange);
+
+        // temporary solution
+        rigidBody.drag = Mathf.Lerp(5.0f, 0.0f, Mathf.Clamp01(rigidBody.velocity.magnitude - 2.5f));
 
         Hover();
     }
